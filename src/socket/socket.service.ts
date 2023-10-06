@@ -1,12 +1,15 @@
 import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { NetworkService } from 'src/network/network.service';
+import { SerialStramService } from 'src/serial-stram/serial-stram.service';
 
 @Injectable()
 export class SocketService implements OnModuleInit {
   constructor(
     @Inject(forwardRef(() => NetworkService))
     private network: NetworkService,
+    @Inject(forwardRef(() => SerialStramService))
+    private serialUsb: SerialStramService,
   ) {}
   private io: Server;
 
@@ -27,13 +30,28 @@ export class SocketService implements OnModuleInit {
     socket.on('disconnect', () =>
       console.log('client disconnected', socket.id),
     );
-    socket.on('message', this.onMessage.bind(this));
+    socket.on('network', this.onNetwork.bind(this));
+    socket.on('moonitoring', this.onNetwork.bind(this));
+    socket.on('communication', this.onCommunication.bind(this));
+    socket.on('gpio', this.onNetwork.bind(this));
   }
 
-  onMessage(data: any) {
+  onNetwork(data: any) {
     console.log(data.topic, data.value);
-    if (data.topic === 'connect') {
+    if (data.cat === 'wifi') {
       this.network.connectToWifi(data.value);
+    }
+  }
+  onCommunication(data: any) {
+    console.log(data.topic, data.value);
+    if (data.topic === 'open') {
+      this.serialUsb.openUsbPort(data.value);
+    }
+    if (data.topic === 'close') {
+      this.serialUsb.CloseUsbPort();
+    }
+    if (data.topic == 'list') {
+      this.serialUsb.listPort();
     }
   }
 
