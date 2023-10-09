@@ -27,7 +27,7 @@ export class PerformanceService {
       this.socket.send('memory', {
         total_GB: (memoryData.total / (1024 * 1024 * 1024)).toFixed(2),
         free_GB: (memoryData.available / (1024 * 1024 * 1024)).toFixed(2),
-        used_GB: (memoryData.used / (1024 * 1024 * 1024)).toFixed(2),
+        used_GB: (memoryData.active / (1024 * 1024 * 1024)).toFixed(2),
       });
     } catch (error) {
       console.error('Error getting memory data:', error);
