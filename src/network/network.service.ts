@@ -75,7 +75,8 @@ export class NetworkService {
         result = execSync(
           `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
         ).toString();
-        if (result.includes('Error')) return 'linux the password is wrong';
+        if (result.includes('Error'))
+          this.socket.send('Connection_status', result.toString());
         else {
           this.socket.send(
             'Connection_status',
