@@ -40,7 +40,7 @@ export class NetworkService {
       });
     } catch (error) {
       console.error('Error getting wifi list data:', error);
-      throw error;
+      this.socket.send('wifi_List', error);
     }
   }
 
@@ -76,14 +76,19 @@ export class NetworkService {
           `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
         ).toString();
         if (result.includes('Error'))
-          this.socket.send('Connection_status', result.toString());
+          this.socket.send('Connection_status', 'wrong Password');
         else {
           this.socket.send(
             'Connection_status',
             `linux connected successefull to ${connectToWifi.ssid}`,
           );
         }
-      } catch (error) {}
+      } catch (error) {
+        this.socket.send(
+          'Connection_status',
+          'SSID not found or password Wrong',
+        );
+      }
     }
     if (platform() === 'win32') {
       console.log('windows');
@@ -95,8 +100,10 @@ export class NetworkService {
     wifi.disconnect((error) => {
       if (error) {
         console.log(error);
+        this.socket.send('disconnect_status', error);
       } else {
         console.log('Disconnected');
+        this.socket.send('disconnect_status', 'disconnected');
       }
     });
   }
