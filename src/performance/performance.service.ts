@@ -13,7 +13,8 @@ export class PerformanceService {
 
   async getCpuUsage() {
     try {
-      const cpuData = await si.fullLoad();
+      const cpuData = (await si.currentLoad()).cpus;
+      console.log(cpuData);
       this.socket.send('cpu', cpuData);
     } catch (error) {
       console.error('Error getting CPU data:', error);
