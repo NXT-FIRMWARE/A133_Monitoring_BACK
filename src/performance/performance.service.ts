@@ -15,7 +15,10 @@ export class PerformanceService {
     try {
       const cpuData = (await si.currentLoad()).cpus;
       console.log(cpuData);
-      this.socket.send('cpu', cpuData);
+      const cpusLoad = cpuData.map((cpu) => {
+        load_in_percent: cpu.load;
+      });
+      this.socket.send('cpu', cpusLoad);
     } catch (error) {
       console.error('Error getting CPU data:', error);
       this.socket.send('cpu', error);
