@@ -1,6 +1,6 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { SocketService } from 'src/socket/socket.service';
-import { SerialPort } from 'serialport';
+import { DelimiterParser, SerialPort } from 'serialport';
 import { RegexParser } from '@serialport/parser-regex';
 @Injectable()
 export class SerialStramService {
@@ -39,7 +39,7 @@ export class SerialStramService {
     this.port.addListener('close', () => {
       this.CloseUsbPort();
     });
-    const parser = this.port.pipe(new RegexParser({ regex: /[\r\n]+/ }));
+    const parser = this.port.pipe(new DelimiterParser({ delimiter: '\n' }));
     parser.on('ready', () =>
       console.log('the ready byte sequence has been received'),
     );
