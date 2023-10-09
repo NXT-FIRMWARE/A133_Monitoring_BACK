@@ -50,7 +50,6 @@ export class SerialStramService {
   }
 
   async CloseUsbPort() {
-    // this.socket.send('usbData', 'portClosed');
     console.log('port Closed');
     if (this.port !== undefined && this.port.isOpen) this.port.close();
   }

@@ -1,5 +1,4 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
-import { Cron, CronExpression } from '@nestjs/schedule';
 import * as wifi from 'node-wifi';
 import { SocketService } from 'src/socket/socket.service';
 import { execSync } from 'child_process';
@@ -20,11 +19,11 @@ export class NetworkService {
     });
   }
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
   async getWifiList() {
     try {
-      try{ execSync('sudo nmcli dev wifi rescan');}
-catch(err){}
+      try {
+        execSync('sudo nmcli dev wifi rescan');
+      } catch (err) {}
       await wifi.scan((error: any, networks: any) => {
         if (error) {
           console.log(error);
@@ -45,7 +44,6 @@ catch(err){}
     }
   }
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
   async getStatus() {
     try {
       await wifi.getCurrentConnections(
@@ -65,7 +63,7 @@ catch(err){}
       );
     } catch (error) {
       console.error('Error getting current Wifi Connection data:', error);
-      throw error;
+      this.socket.send('current_Connection', error.toString());
     }
   }
 
@@ -73,16 +71,18 @@ catch(err){}
     let result = '';
     console.log('in connect');
     if (platform() === 'linux') {
-      result = execSync(
-        `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
-      ).toString();
-      if (result.includes('Error')) return 'linux the password is wrong';
-      else {
-        this.socket.send(
-          'Connection_status',
-          `linux connected successefull to ${connectToWifi.ssid}`,
-        );
-      }
+      try {
+        result = execSync(
+          `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
+        ).toString();
+        if (result.includes('Error')) return 'linux the password is wrong';
+        else {
+          this.socket.send(
+            'Connection_status',
+            `linux connected successefull to ${connectToWifi.ssid}`,
+          );
+        }
+      } catch (error) {}
     }
     if (platform() === 'win32') {
       console.log('windows');

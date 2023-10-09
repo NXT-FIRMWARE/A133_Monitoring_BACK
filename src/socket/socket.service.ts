@@ -41,6 +41,12 @@ export class SocketService implements OnModuleInit {
     if (data.topic === 'connectTo') {
       this.network.connectToWifi(data.value);
     }
+    if (data.topic === 'scan') {
+      this.network.getWifiList();
+    }
+    if (data.topic === 'current_Connection') {
+      this.network.getStatus();
+    }
   }
   onCommunication(data: any) {
     console.log(data.topic, data.value);
