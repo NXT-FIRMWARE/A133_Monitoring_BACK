@@ -76,19 +76,14 @@ export class NetworkService {
           `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
         ).toString();
         if (result.includes('Error'))
-          this.socket.send('Connection_status', 'wrong Password');
+          this.socket.send('Connection_status', result.toString());
         else {
           this.socket.send(
             'Connection_status',
             `linux connected successefull to ${connectToWifi.ssid}`,
           );
         }
-      } catch (error) {
-        this.socket.send(
-          'Connection_status',
-          'SSID not found or password Wrong',
-        );
-      }
+      } catch (error) {}
     }
     if (platform() === 'win32') {
       console.log('windows');
