@@ -1,6 +1,7 @@
 import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import { Server } from 'socket.io';
 import { NetworkService } from 'src/network/network.service';
+import { PerformanceService } from 'src/performance/performance.service';
 import { SerialStramService } from 'src/serial-stram/serial-stram.service';
 
 @Injectable()
@@ -10,6 +11,8 @@ export class SocketService implements OnModuleInit {
     private network: NetworkService,
     @Inject(forwardRef(() => SerialStramService))
     private serialUsb: SerialStramService,
+    @Inject(forwardRef(() => PerformanceService))
+    private performance: PerformanceService,
   ) {}
   private io: Server;
 
@@ -31,7 +34,7 @@ export class SocketService implements OnModuleInit {
       console.log('client disconnected', socket.id),
     );
     socket.on('network', this.onNetwork.bind(this));
-    socket.on('moonitoring', this.onNetwork.bind(this));
+    socket.on('performance', this.onPerformance.bind(this));
     socket.on('communication', this.onCommunication.bind(this));
     socket.on('gpio', this.onNetwork.bind(this));
   }
@@ -46,6 +49,21 @@ export class SocketService implements OnModuleInit {
     }
     if (data.topic === 'current_Connection') {
       this.network.getStatus();
+    }
+  }
+  onPerformance(data: any) {
+    console.log(data.topic, data.value);
+    if (data.topic === 'battery') {
+      this.performance.getBatteryUsage();
+    }
+    if (data.topic === 'cpu') {
+      this.performance.getCpuUsage();
+    }
+    if (data.topic == 'memory') {
+      this.performance.getMemoryUsage();
+    }
+    if (data.topic == 'storage') {
+      this.performance.getDiskUsage();
     }
   }
   onCommunication(data: any) {

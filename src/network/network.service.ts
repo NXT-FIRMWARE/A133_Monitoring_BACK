@@ -85,11 +85,11 @@ export class NetworkService {
           );
         }
       } catch (error) {
-      this.socket.send(
+        this.socket.send(
           'Connection_status',
           'SSID not found or password Wrong',
         );
-}
+      }
     }
     if (platform() === 'win32') {
       console.log('windows');
