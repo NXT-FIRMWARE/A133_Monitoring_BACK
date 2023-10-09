@@ -39,13 +39,21 @@ export class SerialStramService {
     this.port.addListener('close', () => {
       this.CloseUsbPort();
     });
-    const parser = this.port.pipe(new DelimiterParser({ delimiter: '\n' }));
-    parser.on('ready', () =>
-      console.log('the ready byte sequence has been received'),
-    );
-    parser.on('data', (data) => {
-      console.log('data', data.toString());
-      this.socket.send('usbData', data.toString());
+    // const parser = this.port.pipe(new DelimiterParser({ delimiter: '\n' }));
+    // parser.on('ready', () =>
+    //   console.log('the ready byte sequence has been received'),
+    // );
+    // parser.on('data', (data) => {
+    //   console.log('data', data.toString());
+    //   this.socket.send('usbData', data.toString());
+    // });
+    this.port.on('data', function (data) {
+      console.log('Data data:', data);
+    });
+
+    // Read data that is available but keep the stream from entering "flowing mode"
+    this.port.on('readable', function () {
+      console.log('Data readable:', this.port.read());
     });
   }
 
