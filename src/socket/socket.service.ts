@@ -38,7 +38,7 @@ export class SocketService implements OnModuleInit {
 
   onNetwork(data: any) {
     console.log(data.topic, data.value);
-    if (data.cat === 'wifi') {
+    if (data.topic === 'connectTo') {
       this.network.connectToWifi(data.value);
     }
   }

@@ -23,7 +23,8 @@ export class NetworkService {
   @Cron(CronExpression.EVERY_5_SECONDS)
   async getWifiList() {
     try {
-      if (platform() === 'linux') execSync('sudo nmcli dev wifi rescan');
+      try{ execSync('sudo nmcli dev wifi rescan');}
+catch(err){}
       await wifi.scan((error: any, networks: any) => {
         if (error) {
           console.log(error);
@@ -78,7 +79,7 @@ export class NetworkService {
       if (result.includes('Error')) return 'linux the password is wrong';
       else {
         this.socket.send(
-          'connect',
+          'Connection_status',
           `linux connected successefull to ${connectToWifi.ssid}`,
         );
       }
