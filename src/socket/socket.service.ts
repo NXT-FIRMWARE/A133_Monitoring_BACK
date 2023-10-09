@@ -62,7 +62,7 @@ export class SocketService implements OnModuleInit {
     if (data.topic == 'memory') {
       this.performance.getMemoryUsage();
     }
-    if (data.topic == 'storage') {h
+    if (data.topic == 'storage') {
       this.performance.getDiskUsage();
     }
   }
