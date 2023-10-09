@@ -44,6 +44,7 @@ export class PerformanceService {
         total_GB: (storage.size / (1024 * 1024 * 1024)).toFixed(2),
         used_GB: (storage.used / (1024 * 1024 * 1024)).toFixed(2),
         available_GB: (storage.available / (1024 * 1024 * 1024)).toFixed(2),
+        mounted_on: storage.mount,
       }));
       this.socket.send('storage', storage_Data_Filtered);
     } catch (error) {
