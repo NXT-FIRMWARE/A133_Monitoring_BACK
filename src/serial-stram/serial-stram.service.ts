@@ -11,12 +11,13 @@ export class SerialStramService {
   private port: SerialPort;
 
   async listPort() {
-    const list = await SerialPort.list().then((ports) =>
+    let list = await SerialPort.list().then((ports) =>
       ports.map((port) => ({
         portName: port['friendlyName'],
         path: port.path,
       })),
     );
+    list = list.filter((port) => port.path != '/dev/ttyS0');
     console.log('list', list);
     this.socket.send('ports', list);
   }
