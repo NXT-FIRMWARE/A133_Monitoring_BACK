@@ -7,7 +7,7 @@ export class SocketService implements OnModuleInit {
   constructor(
     @Inject(forwardRef(() => NetworkService))
     private network: NetworkService,
-  ) {}
+  ) { }
   private io: Server;
 
   onModuleInit() {

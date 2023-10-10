@@ -23,7 +23,7 @@ export class NetworkService {
   @Cron(CronExpression.EVERY_5_SECONDS)
   async getWifiList() {
     try {
-      if (platform() === 'linux') execSync('sudo nmcli dev wifi rescan');
+      // if (platform() === 'linux') execSync('sudo nmcli dev wifi rescan');
       await wifi.scan((error: any, networks: any) => {
         if (error) {
           console.log(error);
