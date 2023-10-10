@@ -1,6 +1,6 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { SocketService } from 'src/socket/socket.service';
-import { DelimiterParser, SerialPort } from 'serialport';
+import { SerialPort } from 'serialport';
 import { RegexParser } from '@serialport/parser-regex';
 @Injectable()
 export class SerialStramService {
@@ -39,21 +39,13 @@ export class SerialStramService {
     this.port.addListener('close', () => {
       this.CloseUsbPort();
     });
-    // const parser = this.port.pipe(new DelimiterParser({ delimiter: '\n' }));
-    // parser.on('ready', () =>
-    //   console.log('the ready byte sequence has been received'),
-    // );
-    // parser.on('data', (data) => {
-    //   console.log('data', data.toString());
-    //   this.socket.send('usbData', data.toString());
-    // });
-    this.port.on('data', function (data) {
-      console.log('Data data:', data);
-    });
-
-    // Read data that is available but keep the stream from entering "flowing mode"
-    this.port.on('readable', function () {
-      console.log('Data readable:', this.port.read());
+    const parser = this.port.pipe(new RegexParser({ regex: /[\r\n]+/ }));
+    parser.on('ready', () =>
+      console.log('the ready byte sequence has been received'),
+    );
+    parser.on('data', (data) => {
+      console.log('data', data.toString());
+      this.socket.send('usbData', data.toString());
     });
   }
 
