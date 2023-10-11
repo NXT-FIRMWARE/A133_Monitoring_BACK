@@ -10,18 +10,13 @@ export class SshService {
   ) {
     console.log('ssh init');
   }
-  public ssh_Session;
-
-  consol() {
-    console.log('jawad');
-  }
 
   connect_ssh(data: any) {
-    this.ssh_Session = new Client();
-    this.ssh_Session
+    const conn = new Client();
+    conn
       .on('ready', function () {
-        console.log('Client :: ready');
-        this.ssh_Session.shell(function (err, stream) {
+        console.log('Client :: ready', conn);
+        conn.shell(function (err, stream) {
           if (err) {
             console.log('error');
             throw err;
@@ -33,14 +28,13 @@ export class SshService {
             .on('close', function () {
               process.stdout.write('Connection closed.');
               console.log('Stream :: close');
-              this.ssh_Session.end();
+              conn.end();
             })
             .on('data', function (data) {
-              // // pause to prevent more data from coming in
-              // process.stdin.pause();
-              // process.stdout.write(data);
-              // process.stdin.resume();
-              this.socket.send('ssh_send', data);
+              // pause to prevent more data from coming in
+              process.stdin.pause();
+              process.stdout.write(data);
+              process.stdin.resume();
             })
             .stderr.on('data', function (data) {
               process.stderr.write(data);
