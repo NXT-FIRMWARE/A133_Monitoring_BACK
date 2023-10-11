@@ -10,18 +10,6 @@ export class SerialStramService {
   ) {}
   private port: SerialPort;
 
-  async listPort() {
-    let list = await SerialPort.list().then((ports) =>
-      ports.map((port) => ({
-        portName: port['friendlyName'],
-        path: port.path,
-      })),
-    );
-    list = list.filter((port) => port.path != '/dev/ttyS0');
-    console.log('list', list);
-    this.socket.send('ports', list);
-  }
-
   async openUsbPort(data: any) {
     this.port = new SerialPort({
       path: data.path,
@@ -53,5 +41,17 @@ export class SerialStramService {
   async CloseUsbPort() {
     console.log('port Closed');
     if (this.port !== undefined && this.port.isOpen) this.port.close();
+  }
+
+  async listPort() {
+    let list = await SerialPort.list().then((ports) =>
+      ports.map((port) => ({
+        portName: port['friendlyName'],
+        path: port.path,
+      })),
+    );
+    list = list.filter((port) => port.path != '/dev/ttyS0');
+    console.log('list', list);
+    this.socket.send('ports', list);
   }
 }
