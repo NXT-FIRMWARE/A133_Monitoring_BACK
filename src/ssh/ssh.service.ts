@@ -10,7 +10,7 @@ export class SshService {
   ) {
     console.log('ssh init');
   }
-  private ssh_Session;
+  public ssh_Session;
 
   consol() {
     console.log('jawad');
