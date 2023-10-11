@@ -11,11 +11,15 @@ export class SshService {
     console.log('ssh init');
   }
 
+  consol() {
+    console.log('jawad');
+  }
+
   connect_ssh(data: any) {
     const conn = new Client();
     conn
       .on('ready', function () {
-        console.log('Client :: ready', conn);
+        console.log('Client :: ready');
         conn.shell(function (err, stream) {
           if (err) {
             console.log('error');
@@ -33,6 +37,7 @@ export class SshService {
             .on('data', function (data) {
               // pause to prevent more data from coming in
               console.log('socket,', this.socket);
+              this.consol();
               process.stdin.pause();
               process.stdout.write(data);
               process.stdin.resume();
