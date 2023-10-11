@@ -54,7 +54,7 @@ export class SocketService implements OnModuleInit {
 
   onSsh(data: any) {
     console.log(data.topic, data.value);
-    if (data.topic === 'connect') {
+    if (data.topic === 'ssh') {
       this.network.connectToWifi(data.value);
     }
   }
