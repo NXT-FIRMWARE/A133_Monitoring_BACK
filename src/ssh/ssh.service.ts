@@ -16,7 +16,7 @@ export class SshService {
   connect_ssh(data: any) {
     this.conn
       .on('ready', function () {
-        console.log('Client :: ready');
+        console.log('Client :: ready', this.conn);
         this.conn.shell(function (err, stream) {
           if (err) {
             console.log('error');
