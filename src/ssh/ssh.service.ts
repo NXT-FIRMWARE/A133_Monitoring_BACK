@@ -9,15 +9,14 @@ export class SshService {
     private socket: SocketService,
   ) {
     console.log('ssh init');
-    this.conn = new Client();
   }
-  private conn;
 
   connect_ssh(data: any) {
-    this.conn
+    const conn = new Client();
+    conn
       .on('ready', function () {
-        console.log('Client :: ready', this.conn);
-        this.conn.shell(function (err, stream) {
+        console.log('Client :: ready', conn);
+        conn.shell(function (err, stream) {
           if (err) {
             console.log('error');
             throw err;
@@ -29,7 +28,7 @@ export class SshService {
             .on('close', function () {
               process.stdout.write('Connection closed.');
               console.log('Stream :: close');
-              this.conn.end();
+              conn.end();
             })
             .on('data', function (data) {
               // pause to prevent more data from coming in
