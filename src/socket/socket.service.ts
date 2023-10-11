@@ -36,7 +36,7 @@ export class SocketService implements OnModuleInit {
     socket.on('network', this.onNetwork.bind(this));
     socket.on('performance', this.onPerformance.bind(this));
     socket.on('communication', this.onCommunication.bind(this));
-    socket.on('gpio', this.onNetwork.bind(this));
+    socket.on('ssh', this.onSsh.bind(this));
   }
 
   onNetwork(data: any) {
@@ -51,6 +51,14 @@ export class SocketService implements OnModuleInit {
       this.network.getStatus();
     }
   }
+
+  onSsh(data: any) {
+    console.log(data.topic, data.value);
+    if (data.topic === 'connect') {
+      this.network.connectToWifi(data.value);
+    }
+  }
+
   onPerformance(data: any) {
     console.log(data.topic, data.value);
     if (data.topic === 'battery') {
