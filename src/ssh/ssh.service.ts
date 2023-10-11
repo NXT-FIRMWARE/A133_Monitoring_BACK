@@ -34,10 +34,12 @@ export class SshService {
               // pause to prevent more data from coming in
               process.stdin.pause();
               process.stdout.write(data);
+              this.socket.send('ssh_send', data);
               process.stdin.resume();
             })
             .stderr.on('data', function (data) {
               process.stderr.write(data);
+              this.socket.send('ssh_send', data);
             });
 
           rl.on('line', function (d) {
