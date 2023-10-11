@@ -32,6 +32,7 @@ export class SshService {
             })
             .on('data', function (data) {
               // pause to prevent more data from coming in
+              console.log('socket,', this.socket);
               process.stdin.pause();
               process.stdout.write(data);
               process.stdin.resume();
