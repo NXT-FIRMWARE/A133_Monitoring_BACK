@@ -13,7 +13,7 @@ export class SshService {
   }
   private conn;
 
-  connect_ssh(ip: string, username: string, password: string) {
+  connect_ssh(data: any) {
     this.conn
       .on('ready', function () {
         console.log('Client :: ready');
@@ -61,10 +61,10 @@ export class SshService {
         console.log('error', err.message);
       })
       .connect({
-        host: ip,
+        host: data.ip,
         port: 22,
-        username: username,
-        password: password,
+        username: data.username,
+        password: data.password,
       });
   }
 }

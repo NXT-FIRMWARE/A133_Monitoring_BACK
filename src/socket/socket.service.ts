@@ -3,6 +3,7 @@ import { Server } from 'socket.io';
 import { NetworkService } from 'src/network/network.service';
 import { PerformanceService } from 'src/performance/performance.service';
 import { SerialStramService } from 'src/serial-stram/serial-stram.service';
+import { SshService } from 'src/ssh/ssh.service';
 
 @Injectable()
 export class SocketService implements OnModuleInit {
@@ -13,6 +14,8 @@ export class SocketService implements OnModuleInit {
     private serialUsb: SerialStramService,
     @Inject(forwardRef(() => PerformanceService))
     private performance: PerformanceService,
+    @Inject(forwardRef(() => SshService))
+    private ssh: SshService,
   ) {}
   private io: Server;
 
@@ -55,7 +58,7 @@ export class SocketService implements OnModuleInit {
   onSsh(data: any) {
     console.log(data.topic, data.value);
     if (data.topic === 'ssh') {
-      this.network.connectToWifi(data.value);
+      this.ssh.connect_ssh(data.value);
     }
   }
 
