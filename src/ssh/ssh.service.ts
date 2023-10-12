@@ -1,8 +1,7 @@
+import * as readline from 'readline';
 import { Injectable, forwardRef, Inject } from '@nestjs/common';
-import { execSync } from 'child_process';
-import { platform } from 'os';
 import { SocketService } from 'src/socket/socket.service';
-
+import { spawn } from 'child_process';
 @Injectable()
 export class SshService {
   constructor(
@@ -12,20 +11,38 @@ export class SshService {
     console.log('command execution init');
   }
 
-  executeCommand(data: any) {
-    try {
-      const result = execSync(data).toString();
-      this.socket.send('command_result', result);
-    } catch (error) {
-      error.status; // 0 : successful exit, but here in exception it has to be greater than 0
-      console.log('status', error.status);
-      error.message; // Holds the message you typically want.
-      console.log('status', error.message);
-      error.stderr; // Holds the stderr output. Use `.toString()`.
-      console.log('status', error.stderr.toString());
-      error.stdout; // Holds the stdout output. Use `.toString()`.
-      console.log('status', error.stdout.toString());
-      this.socket.send('command_result', error.message);
-    }
+  executeCommand() {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    rl.question('Enter a command (Ctrl+C to exit): ', (command) => {
+      if (command === '') {
+        this.executeCommand(); // Prompt again if no command is entered
+        return;
+      }
+
+      if (command === 'cd ..') {
+        process.chdir('..'); // Change the current working directory
+        console.log(`Changed directory to: ${process.cwd()}`);
+        this.executeCommand(); // Prompt for the next command
+        return;
+      }
+
+      const childProcess = spawn(command, { shell: true });
+
+      childProcess.stdout.on('data', (data) => {
+        console.log(`Command Output: ${data}`);
+      });
+
+      childProcess.stderr.on('data', (data) => {
+        console.error(`Command Error: ${data}`);
+      });
+
+      childProcess.on('close', (code) => {
+        console.log(`Child process exited with code ${code}`);
+        this.executeCommand(); // Prompt for the next command
+      });
+    });
   }
 }
