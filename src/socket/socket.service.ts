@@ -3,15 +3,15 @@ import { Server } from 'socket.io';
 import { ExecuteCommandService } from 'src/execute-command/execute-command.service';
 import { NetworkService } from 'src/network/network.service';
 import { PerformanceService } from 'src/performance/performance.service';
-import { SerialStramService } from 'src/serial-stram/serial-stram.service';
+import { SerialService } from 'src/serial/serial.service';
 
 @Injectable()
 export class SocketService implements OnModuleInit {
   constructor(
     @Inject(forwardRef(() => NetworkService))
     private network: NetworkService,
-    @Inject(forwardRef(() => SerialStramService))
-    private serialUsb: SerialStramService,
+    @Inject(forwardRef(() => SerialService))
+    private serialUsb: SerialService,
     @Inject(forwardRef(() => PerformanceService))
     private performance: PerformanceService,
     @Inject(forwardRef(() => ExecuteCommandService))

@@ -3,7 +3,7 @@ import { SocketService } from 'src/socket/socket.service';
 import { SerialPort } from 'serialport';
 import { RegexParser } from '@serialport/parser-regex';
 @Injectable()
-export class SerialStramService {
+export class SerialService {
   constructor(
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,
