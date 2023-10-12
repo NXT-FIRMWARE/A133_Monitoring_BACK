@@ -1,9 +1,9 @@
 import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import { Server } from 'socket.io';
+import { ExecuteCommandService } from 'src/execute-command/execute-command.service';
 import { NetworkService } from 'src/network/network.service';
 import { PerformanceService } from 'src/performance/performance.service';
 import { SerialStramService } from 'src/serial-stram/serial-stram.service';
-import { SshService } from 'src/ssh/ssh.service';
 
 @Injectable()
 export class SocketService implements OnModuleInit {
@@ -14,8 +14,8 @@ export class SocketService implements OnModuleInit {
     private serialUsb: SerialStramService,
     @Inject(forwardRef(() => PerformanceService))
     private performance: PerformanceService,
-    @Inject(forwardRef(() => SshService))
-    private ssh: SshService,
+    @Inject(forwardRef(() => ExecuteCommandService))
+    private executeCommend: ExecuteCommandService,
   ) {}
   private io: Server;
 
@@ -39,7 +39,7 @@ export class SocketService implements OnModuleInit {
     socket.on('network', this.onNetwork.bind(this));
     socket.on('performance', this.onPerformance.bind(this));
     socket.on('communication', this.onCommunication.bind(this));
-    socket.on('ssh', this.onSsh.bind(this));
+    socket.on('executeCommand', this.onExecuteCommend.bind(this));
   }
 
   onNetwork(data: any) {
@@ -55,10 +55,10 @@ export class SocketService implements OnModuleInit {
     }
   }
 
-  onSsh(data: any) {
+  onExecuteCommend(data: any) {
     console.log(data.topic, data.value);
     if (data.topic === 'executeCommand') {
-      this.ssh.executeCommand(data.value);
+      this.executeCommend.executeCommand(data.value);
     }
   }
 

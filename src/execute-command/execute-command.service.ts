@@ -1,9 +1,9 @@
-import { Injectable, forwardRef, Inject } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { execSync } from 'child_process';
 import { SocketService } from 'src/socket/socket.service';
 
 @Injectable()
-export class SshService {
+export class ExecuteCommandService {
   constructor(
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,
