@@ -2,6 +2,8 @@ import { Injectable, forwardRef, Inject } from '@nestjs/common';
 import { SocketService } from 'src/socket/socket.service';
 import * as readline from 'readline';
 import { Client } from 'ssh2';
+
+priva
 @Injectable()
 export class SshService {
   constructor(
