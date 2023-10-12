@@ -57,8 +57,8 @@ export class SocketService implements OnModuleInit {
 
   onSsh(data: any) {
     console.log(data.topic, data.value);
-    if (data.topic === 'ssh') {
-      this.ssh.executeCommand();
+    if (data.topic === 'executeCommand') {
+      this.ssh.executeCommand(data.value);
     }
   }
 
