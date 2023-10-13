@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 import { SocketService } from 'src/socket/socket.service';
 
 @Injectable()
-export class ExecuteCommandService {
+export class ShellService {
   constructor(
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,

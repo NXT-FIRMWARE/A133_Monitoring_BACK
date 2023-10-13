@@ -4,15 +4,10 @@ import { AppService } from './app.service';
 import { PerformanceModule } from './performance/performance.module';
 import { NetworkModule } from './network/network.module';
 import { SerialModule } from './serial/serial.module';
-import { ExecuteCommandModule } from './execute-command/execute-command.module';
+import { ShellModule } from './shell/shell.module';
 
 @Module({
-  imports: [
-    PerformanceModule,
-    NetworkModule,
-    SerialModule,
-    ExecuteCommandModule,
-  ],
+  imports: [PerformanceModule, NetworkModule, SerialModule, ShellModule],
   controllers: [AppController],
   providers: [AppService],
 })

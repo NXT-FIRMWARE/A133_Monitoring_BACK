@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import { Server } from 'socket.io';
-import { ExecuteCommandService } from 'src/execute-command/execute-command.service';
+import { ShellService } from 'src/shell/shell.service';
 import { NetworkService } from 'src/network/network.service';
 import { PerformanceService } from 'src/performance/performance.service';
 import { SerialService } from 'src/serial/serial.service';
@@ -14,8 +14,8 @@ export class SocketService implements OnModuleInit {
     private serialUsb: SerialService,
     @Inject(forwardRef(() => PerformanceService))
     private performance: PerformanceService,
-    @Inject(forwardRef(() => ExecuteCommandService))
-    private executeCommend: ExecuteCommandService,
+    @Inject(forwardRef(() => ShellService))
+    private executeCommend: ShellService,
   ) {}
   private io: Server;
 
@@ -39,7 +39,7 @@ export class SocketService implements OnModuleInit {
     socket.on('network', this.onNetwork.bind(this));
     socket.on('performance', this.onPerformance.bind(this));
     socket.on('communication', this.onCommunication.bind(this));
-    socket.on('executeCommand', this.onExecuteCommend.bind(this));
+    socket.on('shell', this.onShell.bind(this));
   }
 
   onNetwork(data: any) {
@@ -55,7 +55,7 @@ export class SocketService implements OnModuleInit {
     }
   }
 
-  onExecuteCommend(data: any) {
+  onShell(data: any) {
     console.log(data.topic, data.value);
     if (data.topic === 'executeCommand') {
       this.executeCommend.executeCommand(data.value);
