@@ -49,7 +49,7 @@ export class CameraService {
     await this.connectedCameras();
     for (let i = 0; i < this.connected_Cameras.length; i++) {
       const rec = new Recorder({
-        url: this.connected_Cameras[i].url,
+        url: this.connected_Cameras[i].rtsp,
         folder: this.connected_Cameras[i].path,
         camera: this.connected_Cameras[i].cameraName,
         year: this.date.getFullYear().toString(),
