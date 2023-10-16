@@ -1,6 +1,6 @@
 import { Injectable, Inject, Logger, forwardRef } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 // import * as data from './data.json';
 import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
@@ -64,8 +64,9 @@ export class CameraService {
     }
     console.log('lenght after ', this.recorder.length);
   }
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  @Cron('*/5 * * * * *')
   captureProcess() {
+    console.log('capturing');
     this.recorder.map((recItem) => {
       const storage = execSync(
         `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
