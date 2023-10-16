@@ -72,6 +72,7 @@ export class CameraService {
       ).toString();
       const typeKB = storage.includes('K');
       const sizeValue = +storage.replace(/[GMK]/gi, '');
+      console.log('capturing ', !(typeKB && sizeValue < 150));
       if (!(typeKB && sizeValue < 150)) {
         recItem.recorder.captureImage(() => {
           this.logger.log(
