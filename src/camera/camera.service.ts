@@ -63,8 +63,9 @@ export class CameraService {
     }
     console.log('recorder ', this.recorder);
     console.log('connected cameras', this.connected_Cameras);
+    this.captureProcess();
   }
-  @Cron('*/5 * * * * *')
+
   captureProcess() {
     console.log('capturing');
     this.recorder.map((recItem) => {
