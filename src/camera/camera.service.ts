@@ -1,7 +1,6 @@
 import { Injectable, Inject, Logger, forwardRef } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
 import { Cron } from '@nestjs/schedule';
-// import * as data from './data.json';
 import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 import { SocketService } from 'src/socket/socket.service';
@@ -62,7 +61,8 @@ export class CameraService {
         id: this.connected_Cameras[i].ip,
       });
     }
-    console.log('lenght after ', this.recorder.length);
+    console.log('recorder ', this.recorder);
+    console.log('connected cameras', this.connected_Cameras);
   }
   @Cron('*/5 * * * * *')
   captureProcess() {
