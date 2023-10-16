@@ -49,4 +49,27 @@ export class DatabaseService {
     const cameras = await prisma.camera.findMany();
     return cameras;
   }
+
+  async update(Camera: Camera) {
+    try {
+      await prisma.camera.update({
+        where: {
+          ip: Camera.ip,
+        },
+        data: {
+          ip: Camera.ip,
+          cameraName: Camera.cameraName,
+          rtsp: Camera.rtsp,
+          path: Camera.path,
+          capture_time: Camera.capture_time,
+          http_server: Camera.http_server,
+          ftp_server: Camera.ftp_server,
+          ftp_username: Camera.ftp_username,
+          ftp_password: Camera.ftp_password,
+        },
+      });
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
 }
