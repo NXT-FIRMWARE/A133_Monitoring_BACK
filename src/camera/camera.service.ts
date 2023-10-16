@@ -41,8 +41,6 @@ export class CameraService {
     });
   }
 
-  // every day at 00 :00
-  @Cron('0 0 * * *')
   async initRecorder() {
     console.log('init Recorder');
     this.date = new Date();
@@ -67,7 +65,6 @@ export class CameraService {
     console.log('lenght after ', this.recorder.length);
   }
 
-  @Cron(CronExpression.EVERY_5_SECONDS)
   captureProcess() {
     this.recorder.map((recItem) => {
       const storage = execSync(
