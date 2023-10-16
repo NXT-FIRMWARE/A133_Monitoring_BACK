@@ -1,9 +1,18 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import { Server } from 'socket.io';
+import { CameraService } from 'src/camera/camera.service';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class SocketService implements OnModuleInit {
-  constructor() {}
+  constructor(
+    @Inject(forwardRef(() => DatabaseService))
+    private database: DatabaseService,
+    @Inject(forwardRef(() => CameraService))
+    private camera: CameraService,
+  ) {
+    console.log('socket init');
+  }
   private io: Server;
 
   onModuleInit() {
@@ -24,12 +33,22 @@ export class SocketService implements OnModuleInit {
       console.log('client disconnected', socket.id),
     );
     socket.on('data', this.onData.bind(this));
+    socket.on('camera', this.onCamera.bind(this));
   }
-
   onData(data: any) {
     console.log(data.topic, data.value);
     if (data.topic === 'test') {
-      console.log(data.topic, data.value);
+      console.log('test');
+    }
+  }
+
+  onCamera(data: any) {
+    console.log(data.topic, data.value);
+    if (data.topic === 'addCamera') {
+      this.database.create(data.value);
+    }
+    if (data.topic === 'start') {
+      this.camera.captureProcess();
     }
   }
   send(topic: string, data: any) {
