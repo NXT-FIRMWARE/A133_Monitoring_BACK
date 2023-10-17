@@ -86,7 +86,7 @@ export class CameraService {
           this.logger.log('stop Saving in memory ');
         }
       }, recItem.capture_time);
-      // this.clearRecording.push(clearing);
+      this.clearRecording.push(clearing);
     });
   }
 
