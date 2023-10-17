@@ -129,20 +129,17 @@ export class CameraService {
     formDataRequest.append('time', new Date().toLocaleString());
     formDataRequest.append('status', 'success' || '');
     formDataRequest.append('name', cameraName || '');
-    this.logger.log(`${http_server}/camera/${cameraName}/image`);
+    this.logger.log(`${http_server}`);
+    console.log('data', formDataRequest);
     try {
       console.log('post image ....');
-      const result = await axios.post(
-        `${http_server}/camera/${cameraName}/image`,
-        formDataRequest,
-        {
-          headers: {
-            accept: 'application/json',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'Content-Type': 'multipart/form-data',
-          },
+      const result = await axios.post(`${http_server}`, formDataRequest, {
+        headers: {
+          accept: 'application/json',
+          'Accept-Language': 'en-US,en;q=0.8',
+          'Content-Type': 'multipart/form-data',
         },
-      );
+      });
       this.logger.log(result.data);
       //delete image
       //this.deleteImage(fullPath);
