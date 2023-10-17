@@ -18,7 +18,7 @@ export class CameraService {
   public date = new Date();
   private logger = new Logger('CAMERA_SERVICE');
   private connected_Cameras = [];
-  private capture_time: number;
+  public capture_time: number;
 
   constructor(
     @Inject(forwardRef(() => SocketService))
@@ -75,6 +75,11 @@ export class CameraService {
       () => {
         this.recorder.map((recItem) => {
           this.capture_time = recItem.recorder.capture_time;
+          console.log(
+            'capturing interval',
+            recItem.recorder.capture_time,
+            this.capture_time,
+          );
           const storage = execSync(
             `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
           ).toString();
@@ -92,7 +97,6 @@ export class CameraService {
             this.logger.log('stop Saving in memory ');
           }
         });
-        console.log('capturing interval', this.capture_time);
       },
       this.capture_time === undefined ? 5000 : this.capture_time,
     );
