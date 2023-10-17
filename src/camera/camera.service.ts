@@ -39,6 +39,19 @@ export class CameraService {
         console.log(`ping not success  to ${camera.ip}`);
       }
     });
+    //test if there is any camera connecetd
+    if (this.connected_Cameras.length === 0)
+      this.socket.send(
+        'not_connected_cameras',
+        'cant start capturing not camera atatched',
+      );
+    else {
+      const connected_cams = this.connected_Cameras.map((camera) => {
+        ip: camera.ip;
+        name: camera.name;
+      });
+      this.socket.send('connected_cameras', connected_cams);
+    }
   }
 
   async initRecorder() {
@@ -66,7 +79,9 @@ export class CameraService {
   }
 
   captureProcess() {
-    console.log('capturing', this.recorder.length);
+    //test if there is any camera connecetd
+    if (this.recorder.length === 0)
+      this.socket.send('camera', 'cant start capturing not camera atatched');
     this.recorder.map((recItem) => {
       const clearing = setInterval(() => {
         const storage = execSync(

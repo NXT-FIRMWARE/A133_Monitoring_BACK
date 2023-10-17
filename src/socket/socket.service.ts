@@ -53,6 +53,9 @@ export class SocketService implements OnModuleInit {
     if (data.topic === 'deleteCamera') {
       this.database.delete(data.value);
     }
+    if (data.topic === 'init_capture') {
+      this.camera.initRecorder();
+    }
     if (data.topic === 'startCapture') {
       this.camera.captureProcess();
     }
