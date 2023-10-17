@@ -1,6 +1,6 @@
 import { Injectable, Inject, Logger, forwardRef } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
-import { Cron, CronExpression } from '@nestjs/schedule';
+// import { Cron, CronExpression } from '@nestjs/schedule';
 import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 import { SocketService } from 'src/socket/socket.service';
@@ -9,6 +9,7 @@ const prisma = new PrismaClient();
 interface Recorder {
   recorder: any;
   id: string;
+  capture_time: number;
 }
 
 @Injectable()
@@ -17,6 +18,7 @@ export class CameraService {
   public date = new Date();
   private logger = new Logger('CAMERA_SERVICE');
   private connected_Cameras = [];
+  private capture_time: number;
 
   constructor(
     @Inject(forwardRef(() => SocketService))
@@ -59,6 +61,7 @@ export class CameraService {
       this.recorder.push({
         recorder: rec,
         id: this.connected_Cameras[i].ip,
+        capture_time: this.connected_Cameras[i].capture_time,
       });
     }
     console.log('recorder ', this.recorder);
@@ -66,26 +69,28 @@ export class CameraService {
     this.captureProcess();
   }
 
-  @Cron('*/5 * * * * *')
   captureProcess() {
     console.log('capturing');
-    this.recorder.map((recItem) => {
-      const storage = execSync(
-        `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
-      ).toString();
-      const typeKB = storage.includes('K');
-      const sizeValue = +storage.replace(/[GMK]/gi, '');
-      console.log('capturing ', !(typeKB && sizeValue < 150));
-      if (!(typeKB && sizeValue < 150)) {
-        recItem.recorder.captureImage(() => {
-          this.logger.log(
-            'image saved to ',
-            recItem.recorder.folder + recItem.recorder.camera,
-          );
-        });
-      } else {
-        this.logger.log('stop Saving in memory ');
-      }
-    });
+    setInterval(() => {
+      this.recorder.map((recItem) => {
+        this.capture_time = recItem.recorder.capture_time;
+        const storage = execSync(
+          `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
+        ).toString();
+        const typeKB = storage.includes('K');
+        const sizeValue = +storage.replace(/[GMK]/gi, '');
+        console.log('capturing ', !(typeKB && sizeValue < 150));
+        if (!(typeKB && sizeValue < 150)) {
+          recItem.recorder.captureImage(() => {
+            this.logger.log(
+              'image saved to ',
+              recItem.recorder.folder + recItem.recorder.camera,
+            );
+          });
+        } else {
+          this.logger.log('stop Saving in memory ');
+        }
+      });
+    }, this.capture_time);
   }
 }
