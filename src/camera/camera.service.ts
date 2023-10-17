@@ -18,7 +18,7 @@ export class CameraService {
   public date = new Date();
   private logger = new Logger('CAMERA_SERVICE');
   private connected_Cameras = [];
-  private clearRecording: NodeJS.Timeout[];
+  private clearRecording: NodeJS.Timeout[] = [];
 
   constructor(
     @Inject(forwardRef(() => SocketService))
