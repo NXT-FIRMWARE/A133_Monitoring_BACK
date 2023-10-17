@@ -4,6 +4,7 @@ import { Recorder } from 'node-rtsp-recorder';
 import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 import { SocketService } from 'src/socket/socket.service';
+import * as fs from 'fs';
 const prisma = new PrismaClient();
 
 interface Recorder {
@@ -87,11 +88,8 @@ export class CameraService {
         const sizeValue = +storage.replace(/[GMK]/gi, '');
         console.log('capturing ', !(typeKB && sizeValue < 150));
         if (!(typeKB && sizeValue < 150)) {
-          recItem.recorder.captureImage(() => {
-            this.logger.log(
-              'image saved to ',
-              recItem.recorder.folder + recItem.recorder.camera,
-            );
+          recItem.recorder.captureImage((fullPath) => {
+            this.logger.log('fullPath', fullPath);
           });
         } else {
           this.logger.log('stop Saving in memory ');
@@ -107,4 +105,39 @@ export class CameraService {
       clearInterval(clearCam);
     });
   }
+
+  // async PostImage(fullPath: string, cameraName: string, cameraIndex: number) {
+  //   // const filename = 'C:/Users/jbray/Desktop/hello.png';
+  //   console.log(cameraName);
+  //   const formDataRequest = new FormData();
+  //   const image = await fs.createReadStream(fullPath);
+  //   formDataRequest.append('images', image || '');
+  //   // data.append('id', data[cameraIndex].uuid);
+  //   formDataRequest.append('time', new Date().toLocaleString());
+  //   formDataRequest.append('status', 'success' || '');
+  //   formDataRequest.append('location', process.env.LOCATION || '');
+  //   formDataRequest.append('name', cameraName || '');
+  //   this.logger.log(
+  //     `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+  //   );
+  //   try {
+  //     console.log('post image ....');
+  //     const result = await axios.post(
+  //       `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
+  //       formDataRequest,
+  //       {
+  //         headers: {
+  //           accept: 'application/json',
+  //           'Accept-Language': 'en-US,en;q=0.8',
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       },
+  //     );
+  //     this.logger.log(result.data);
+  //     //delete image
+  //     //this.deleteImage(fullPath);
+  //   } catch (error) {
+  //     this.logger.error(error);
+  //   }
+  // }
 }
