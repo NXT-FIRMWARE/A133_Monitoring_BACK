@@ -49,7 +49,7 @@ export class CameraService {
       console.log('ping', this.connected_Cameras);
       const connected_cams = this.connected_Cameras.map((camera) => {
         ip: camera.ip;
-        name: camera.name;
+        cameraName: camera.cameraName;
       });
       this.socket.send('connected_cameras', connected_cams);
     }
@@ -83,7 +83,8 @@ export class CameraService {
     //test if there is any camera connecetd
     if (this.recorder.length === 0)
       this.socket.send('camera', 'cant start capturing not camera atatched');
-    this.recorder.map((recItem) => {
+    this.recorder.map((recItem) => 
+    {
       const clearing = setInterval(() => {
         const storage = execSync(
           `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
