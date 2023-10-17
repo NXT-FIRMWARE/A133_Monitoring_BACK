@@ -72,4 +72,15 @@ export class DatabaseService {
       console.log('error', error);
     }
   }
+  async delete(Camera: Camera) {
+    try {
+      await prisma.camera.delete({
+        where: {
+          ip: Camera.ip,
+        },
+      });
+    } catch (error) {
+      console.log('error', error);
+    }
+  }
 }

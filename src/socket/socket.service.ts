@@ -50,7 +50,10 @@ export class SocketService implements OnModuleInit {
     if (data.topic === 'updateCamera') {
       this.database.update(data.value);
     }
-    if (data.topic === 'start') {
+    if (data.topic === 'deleteCamera') {
+      this.database.delete(data.value);
+    }
+    if (data.topic === 'startCapture') {
       this.camera.captureProcess();
     }
   }

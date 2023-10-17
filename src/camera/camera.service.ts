@@ -18,7 +18,7 @@ export class CameraService {
   public date = new Date();
   private logger = new Logger('CAMERA_SERVICE');
   private connected_Cameras = [];
-  public capture_time: number;
+  private clearRecording: NodeJS.Timeout[];
 
   constructor(
     @Inject(forwardRef(() => SocketService))
@@ -73,7 +73,7 @@ export class CameraService {
     console.log('capturing');
 
     this.recorder.map((recItem) => {
-      setInterval(() => {
+      const clearing = setInterval(() => {
         const storage = execSync(
           `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
         ).toString();
@@ -91,6 +91,14 @@ export class CameraService {
           this.logger.log('stop Saving in memory ');
         }
       }, recItem.capture_time);
+      this.clearRecording.push(clearing);
+    });
+  }
+
+  async stopRecording() {
+    console.log('stop recording');
+    this.clearRecording.map((clearCam) => {
+      clearInterval(clearCam);
     });
   }
 }
