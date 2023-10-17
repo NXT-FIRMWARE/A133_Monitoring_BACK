@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 import { SocketService } from 'src/socket/socket.service';
 import * as fs from 'fs';
-import FormData from 'form-data';
+import * as FormData from 'form-data';
 const prisma = new PrismaClient();
 
 interface Recorder {
