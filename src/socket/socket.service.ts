@@ -43,7 +43,6 @@ export class SocketService implements OnModuleInit {
   }
 
   onCamera(data: any) {
-    console.log(data.topic, data.value);
     if (data.topic === 'addCamera') {
       this.database.create(data.value);
     }
