@@ -57,7 +57,7 @@ export class SocketService implements OnModuleInit {
       this.camera.captureProcess();
     }
     if (data.topic === 'stopCapture') {
-      this.camera.captureProcess();
+      this.camera.stopCaptureProcess();
     }
   }
   send(topic: string, data: any) {

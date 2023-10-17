@@ -95,7 +95,7 @@ export class CameraService {
     });
   }
 
-  async stopRecording() {
+  async stopCaptureProcess() {
     console.log('stop recording');
     this.clearRecording.map((clearCam) => {
       clearInterval(clearCam);
