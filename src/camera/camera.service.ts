@@ -66,7 +66,7 @@ export class CameraService {
   }
 
   captureProcess() {
-    console.log('capturing');
+    console.log('capturing', this.recorder.length());
     this.recorder.map((recItem) => {
       const clearing = setInterval(() => {
         const storage = execSync(
@@ -86,7 +86,7 @@ export class CameraService {
           this.logger.log('stop Saving in memory ');
         }
       }, recItem.capture_time);
-      this.clearRecording.push(clearing);
+      // this.clearRecording.push(clearing);
     });
   }
 
