@@ -134,8 +134,6 @@ export class CameraService {
       console.log('post image ....');
       const result = await axios.post(`${http_server}`, formDataRequest, {
         headers: {
-          'accept': 'application/json',
-          'Accept-Language': 'en-US,en;q=0.8',
           'Content-Type': 'multipart/form-data',
         },
       });
