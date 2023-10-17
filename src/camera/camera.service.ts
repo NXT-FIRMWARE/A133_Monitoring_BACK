@@ -46,6 +46,7 @@ export class CameraService {
         'cant start capturing not camera atatched',
       );
     else {
+      console.log('ping', this.connected_Cameras);
       const connected_cams = this.connected_Cameras.map((camera) => {
         ip: camera.ip;
         name: camera.name;
