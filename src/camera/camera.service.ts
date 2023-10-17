@@ -91,6 +91,7 @@ export class CameraService {
           this.logger.log('stop Saving in memory ');
         }
       });
+      console.log('capturing interval', this.capture_time);
     }, this.capture_time);
   }
 }
