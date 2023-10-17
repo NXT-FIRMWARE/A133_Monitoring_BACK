@@ -74,8 +74,12 @@ export class CameraService {
     setInterval(
       () => {
         this.recorder.map((recItem) => {
-          this.capture_time = recItem.recorder.capture_time;
-          console.log('capturing interval', recItem.recorder.capture_time);
+          this.capture_time = recItem.capture_time;
+          console.log(
+            'capturing interval',
+            recItem.capture_time,
+            this.capture_time,
+          );
           const storage = execSync(
             `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
           ).toString();
