@@ -1,16 +1,21 @@
 import { Injectable, Inject, Logger, forwardRef } from '@nestjs/common';
 import { Recorder } from 'node-rtsp-recorder';
-// import { Cron, CronExpression } from '@nestjs/schedule';
+import axios from 'axios';
 import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 import { SocketService } from 'src/socket/socket.service';
 import * as fs from 'fs';
+import FormData from 'form-data';
 const prisma = new PrismaClient();
 
 interface Recorder {
   recorder: any;
   id: string;
   capture_time: number;
+  http_server?: string;
+  ftp_server?: string;
+  ftp_username?: string;
+  ftp_password?: string;
 }
 
 @Injectable()
@@ -24,7 +29,9 @@ export class CameraService {
   constructor(
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,
-  ) {}
+  ) {
+    this.initRecorder();
+  }
 
   async connectedCameras() {
     this.connected_Cameras.length = 0;
@@ -70,6 +77,7 @@ export class CameraService {
         recorder: rec,
         id: this.connected_Cameras[i].ip,
         capture_time: this.connected_Cameras[i].capture_time,
+        http_server: this.connected_Cameras[i].http_server,
       });
     }
     console.log('recorder ', this.recorder);
@@ -90,6 +98,12 @@ export class CameraService {
         if (!(typeKB && sizeValue < 150)) {
           recItem.recorder.captureImage((fullPath) => {
             this.logger.log('fullPath', fullPath);
+            if (recItem.http_server)
+              this.PostImage(
+                fullPath,
+                recItem.recorder.camera,
+                recItem.http_server,
+              );
           });
         } else {
           this.logger.log('stop Saving in memory ');
@@ -106,38 +120,34 @@ export class CameraService {
     });
   }
 
-  // async PostImage(fullPath: string, cameraName: string, cameraIndex: number) {
-  //   // const filename = 'C:/Users/jbray/Desktop/hello.png';
-  //   console.log(cameraName);
-  //   const formDataRequest = new FormData();
-  //   const image = await fs.createReadStream(fullPath);
-  //   formDataRequest.append('images', image || '');
-  //   // data.append('id', data[cameraIndex].uuid);
-  //   formDataRequest.append('time', new Date().toLocaleString());
-  //   formDataRequest.append('status', 'success' || '');
-  //   formDataRequest.append('location', process.env.LOCATION || '');
-  //   formDataRequest.append('name', cameraName || '');
-  //   this.logger.log(
-  //     `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
-  //   );
-  //   try {
-  //     console.log('post image ....');
-  //     const result = await axios.post(
-  //       `${this.host}/camera/${this.CameraConfig[cameraIndex].uuid}/image`,
-  //       formDataRequest,
-  //       {
-  //         headers: {
-  //           accept: 'application/json',
-  //           'Accept-Language': 'en-US,en;q=0.8',
-  //           'Content-Type': 'multipart/form-data',
-  //         },
-  //       },
-  //     );
-  //     this.logger.log(result.data);
-  //     //delete image
-  //     //this.deleteImage(fullPath);
-  //   } catch (error) {
-  //     this.logger.error(error);
-  //   }
-  // }
+  async PostImage(fullPath: string, cameraName: string, http_server: string) {
+    // const filename = 'C:/Users/jbray/Desktop/hello.png';
+    console.log(cameraName);
+    const formDataRequest = new FormData();
+    const image = await fs.createReadStream(fullPath);
+    formDataRequest.append('image', image);
+    formDataRequest.append('time', new Date().toLocaleString());
+    formDataRequest.append('status', 'success' || '');
+    formDataRequest.append('name', cameraName || '');
+    this.logger.log(`${http_server}/camera/${cameraName}/image`);
+    try {
+      console.log('post image ....');
+      const result = await axios.post(
+        `${http_server}/camera/${cameraName}/image`,
+        formDataRequest,
+        {
+          headers: {
+            accept: 'application/json',
+            'Accept-Language': 'en-US,en;q=0.8',
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
+      this.logger.log(result.data);
+      //delete image
+      //this.deleteImage(fullPath);
+    } catch (error) {
+      this.logger.error(error);
+    }
+  }
 }
