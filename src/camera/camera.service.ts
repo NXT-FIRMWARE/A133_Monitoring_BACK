@@ -71,27 +71,30 @@ export class CameraService {
 
   captureProcess() {
     console.log('capturing');
-    setInterval(() => {
-      this.recorder.map((recItem) => {
-        this.capture_time = recItem.recorder.capture_time;
-        const storage = execSync(
-          `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
-        ).toString();
-        const typeKB = storage.includes('K');
-        const sizeValue = +storage.replace(/[GMK]/gi, '');
-        console.log('capturing ', !(typeKB && sizeValue < 150));
-        if (!(typeKB && sizeValue < 150)) {
-          recItem.recorder.captureImage(() => {
-            this.logger.log(
-              'image saved to ',
-              recItem.recorder.folder + recItem.recorder.camera,
-            );
-          });
-        } else {
-          this.logger.log('stop Saving in memory ');
-        }
-      });
-      console.log('capturing interval', this.capture_time);
-    }, this.capture_time);
+    setInterval(
+      () => {
+        this.recorder.map((recItem) => {
+          this.capture_time = recItem.recorder.capture_time;
+          const storage = execSync(
+            `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
+          ).toString();
+          const typeKB = storage.includes('K');
+          const sizeValue = +storage.replace(/[GMK]/gi, '');
+          console.log('capturing ', !(typeKB && sizeValue < 150));
+          if (!(typeKB && sizeValue < 150)) {
+            recItem.recorder.captureImage(() => {
+              this.logger.log(
+                'image saved to ',
+                recItem.recorder.folder + recItem.recorder.camera,
+              );
+            });
+          } else {
+            this.logger.log('stop Saving in memory ');
+          }
+        });
+        console.log('capturing interval', this.capture_time);
+      },
+      this.capture_time === undefined ? 5000 : this.capture_time,
+    );
   }
 }
