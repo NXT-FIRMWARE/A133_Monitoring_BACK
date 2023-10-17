@@ -30,7 +30,6 @@ export class CameraService {
   async connectedCameras() {
     this.connected_Cameras.length = 0;
     const cameras = await prisma.camera.findMany();
-    console.log('cameras', cameras);
     cameras.map((camera) => {
       try {
         execSync(`sudo ping -c 5 ${camera.ip}`).toString();
@@ -46,7 +45,6 @@ export class CameraService {
     console.log('init Recorder');
     this.date = new Date();
     this.recorder.length = 0;
-    this.connected_Cameras.length = 0;
     await this.connectedCameras();
     for (let i = 0; i < this.connected_Cameras.length; i++) {
       const rec = new Recorder({
@@ -65,13 +63,10 @@ export class CameraService {
       });
     }
     console.log('recorder ', this.recorder);
-    console.log('connected cameras', this.connected_Cameras);
-    this.captureProcess();
   }
 
   captureProcess() {
     console.log('capturing');
-
     this.recorder.map((recItem) => {
       const clearing = setInterval(() => {
         const storage = execSync(
