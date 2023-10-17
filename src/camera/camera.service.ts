@@ -23,9 +23,7 @@ export class CameraService {
   constructor(
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,
-  ) {
-    this.initRecorder();
-  }
+  ) {}
 
   async connectedCameras() {
     this.connected_Cameras.length = 0;
@@ -41,10 +39,7 @@ export class CameraService {
     });
     //test if there is any camera connecetd
     if (this.connected_Cameras.length === 0)
-      this.socket.send(
-        'not_connected_cameras',
-        'cant start capturing not camera atatched',
-      );
+      this.socket.send('connected_cameras', 'no camera atatched');
     else {
       console.log('ping', this.connected_Cameras);
       const connected_cams = this.connected_Cameras.map((camera) => ({
@@ -82,7 +77,7 @@ export class CameraService {
   captureProcess() {
     //test if there is any camera connecetd
     if (this.recorder.length === 0)
-      this.socket.send('camera', 'cant start capturing not camera atatched');
+      this.socket.send('camera', 'no camera atatched');
     this.recorder.map((recItem) => {
       const clearing = setInterval(() => {
         const storage = execSync(

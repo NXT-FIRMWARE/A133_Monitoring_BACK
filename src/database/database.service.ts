@@ -40,8 +40,10 @@ export class DatabaseService {
       });
 
       console.log('camera added successufuly');
+      this.socket.send('database', ' camera added success');
     } catch (error) {
       console.log('error', error);
+      this.socket.send('database', error.message);
     }
   }
 
@@ -68,8 +70,10 @@ export class DatabaseService {
           ftp_password: Camera.ftp_password,
         },
       });
+      this.socket.send('database', ' camera updated success');
     } catch (error) {
       console.log('error', error);
+      this.socket.send('database', error.message);
     }
   }
   async delete(Camera: Camera) {
@@ -79,8 +83,10 @@ export class DatabaseService {
           ip: Camera.ip,
         },
       });
+      this.socket.send('database', ' camera deleted success');
     } catch (error) {
       console.log('error', error);
+      this.socket.send('database', error.message);
     }
   }
 }
