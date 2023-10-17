@@ -123,20 +123,20 @@ export class CameraService {
   async PostImage(fullPath: string, cameraName: string, http_server: string) {
     // const filename = 'C:/Users/jbray/Desktop/hello.png';
     console.log(cameraName);
-    const formDataRequest = new FormData();
-    const image = await fs.createReadStream(fullPath);
-    formDataRequest.append('image', image);
-    formDataRequest.append('time', new Date().toLocaleString());
-    formDataRequest.append('name', cameraName || '');
-    this.logger.log(`${http_server}`);
-    console.log('data', formDataRequest);
+    // const formDataRequest = new FormData();
+    // const image = await fs.createReadStream(fullPath);
+    // formDataRequest.append('image', image);
+    // formDataRequest.append('time', new Date().toLocaleString());
+    // formDataRequest.append('name', cameraName || '');
+    // this.logger.log(`${http_server}`);
+    const json = {
+      hh: 'cc',
+      fjezlm: 'hlvj',
+    };
+    console.log('data', json);
     try {
       console.log('post image ....');
-      const result = await axios.post(`${http_server}`, formDataRequest, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const result = await axios.post(`${http_server}`, json);
       this.logger.log(result.data);
       //delete image
       //this.deleteImage(fullPath);
