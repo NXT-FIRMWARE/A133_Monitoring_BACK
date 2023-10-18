@@ -1,9 +1,13 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit, forwardRef } from '@nestjs/common';
 import { Server } from 'socket.io';
+import { NetworkService } from 'src/network/network.service';
 
 @Injectable()
 export class SocketService implements OnModuleInit {
-  constructor() {}
+  constructor(
+    @Inject(forwardRef(() => NetworkService))
+    private network: NetworkService,
+  ) {}
   private io: Server;
 
   onModuleInit() {
@@ -24,12 +28,26 @@ export class SocketService implements OnModuleInit {
       console.log('client disconnected', socket.id),
     );
     socket.on('data', this.onData.bind(this));
+    socket.on('network', this.onNetwork.bind(this));
   }
 
   onData(data: any) {
     console.log(data.topic, data.value);
     if (data.topic === 'test') {
       console.log(data.topic, data.value);
+    }
+  }
+
+  onNetwork(data: any) {
+    console.log(data.topic, data.value);
+    if (data.topic === 'connectTo') {
+      this.network.connectToWifi(data.value);
+    }
+    if (data.topic === 'scan') {
+      this.network.getWifiList();
+    }
+    if (data.topic === 'current_Connection') {
+      this.network.getStatus();
     }
   }
   send(topic: string, data: any) {
