@@ -4,6 +4,7 @@ import axios from 'axios';
 import { execSync } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 import { SocketService } from 'src/socket/socket.service';
+import { HttpPosterService } from 'src/http-poster/http-poster.service';
 import * as fs from 'fs';
 import * as FormData from 'form-data';
 const prisma = new PrismaClient();
@@ -12,6 +13,7 @@ interface Recorder {
   recorder: any;
   id: string;
   capture_time: number;
+  postmethod: string;
   http_server?: string;
   ftp_server?: string;
   ftp_username?: string;
@@ -27,6 +29,7 @@ export class CameraService {
   private clearRecording: NodeJS.Timeout[] = [];
 
   constructor(
+    private readonly HttpPosterService: HttpPosterService,
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,
   ) {
@@ -77,7 +80,11 @@ export class CameraService {
         recorder: rec,
         id: this.connected_Cameras[i].ip,
         capture_time: this.connected_Cameras[i].capture_time,
+        postmethod: this.connected_Cameras[i].postmethod,
         http_server: this.connected_Cameras[i].http_server,
+        ftp_server: this.connected_Cameras[i].ftp_server,
+        ftp_username: this.connected_Cameras[i].ftp_username,
+        ftp_password: this.connected_Cameras[i].ftp_password,
       });
     }
     console.log('recorder ', this.recorder);
@@ -88,6 +95,8 @@ export class CameraService {
     if (this.recorder.length === 0)
       this.socket.send('camera', 'no camera atatched');
     this.recorder.map((recItem) => {
+      if (recItem.postmethod === 'http') this.HttpPosterService.filesUploader();
+      else console.log('no upload , just saving');
       const clearing = setInterval(() => {
         const storage = execSync(
           `df -h ${recItem.recorder.folder} | awk 'NR==2 {print $4}'`,
@@ -99,7 +108,7 @@ export class CameraService {
           recItem.recorder.captureImage((fullPath) => {
             this.logger.log('fullPath', fullPath);
             if (recItem.http_server)
-              this.PostImage(
+              this.HttpPosterService.PostImage(
                 fullPath,
                 recItem.recorder.camera,
                 recItem.http_server,
