@@ -21,6 +21,7 @@ export class NetworkController {
 
   @Post('hostname')
   changeHostname(@Body() hostname: string) {
+    console.log('hos    ', hostname);
     return this.networkService.hostname(hostname);
   }
 }
