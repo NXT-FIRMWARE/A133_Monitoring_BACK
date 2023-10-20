@@ -28,7 +28,7 @@ export class SocketService implements OnModuleInit {
       console.log('client disconnected', socket.id),
     );
     socket.on('data', this.onData.bind(this));
-    socket.on('scan', this.onNetwork.bind(this));
+    // socket.on('scan', this.onNetwork.bind(this));
   }
 
   onData(data: any) {
@@ -38,10 +38,10 @@ export class SocketService implements OnModuleInit {
     }
   }
 
-  onNetwork() {
-    console.log('scan');
-    this.network.getWifiList();
-  }
+  // onNetwork() {
+  //   console.log('scan');
+  //   // this.network.getWifiList();
+  // }
   send(topic: string, data: any) {
     this.io.emit(topic, data);
   }

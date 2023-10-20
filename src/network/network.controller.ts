@@ -21,6 +21,7 @@ export class NetworkController {
 
   @Get('scan')
   getScan() {
+    console.log('controller scan');
     return this.networkService.getWifiList();
   }
 }
