@@ -1,4 +1,9 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import * as wifi from 'node-wifi';
 import { SocketService } from 'src/socket/socket.service';
 import { exec, execSync } from 'child_process';
@@ -103,7 +108,11 @@ export class NetworkService {
             `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
           ).toString();
           console.log('the reult is :', result);
-          if (result.toString().includes('Error')) return 'wrong Password';
+          if (result.toString().includes('Error'))
+            throw new BadRequestException('wrong password', {
+              cause: new Error(),
+              description: 'wrong password',
+            });
           else return `linux connected successefull to ${connectToWifi.ssid}`;
         } else {
           try {
@@ -116,7 +125,10 @@ export class NetworkService {
           else return `linux connected successefull to ${connectToWifi.ssid}`;
         }
       } catch (error) {
-        return 'SSID not found or password Wrong';
+        throw new BadRequestException('wrong ssid', {
+          cause: new Error(),
+          description: 'wrong ssid',
+        });
       }
     }
     if (platform() === 'win32') {
