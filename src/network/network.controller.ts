@@ -19,9 +19,8 @@ export class NetworkController {
     return this.networkService.getStatus();
   }
 
-  @Post('hostname')
-  changeHostname(@Body() hostname) {
-    console.log('hos    ', hostname);
-    return this.networkService.hostname(hostname);
+  @Get('scan')
+  getScan() {
+    return this.networkService.getWifiList();
   }
 }

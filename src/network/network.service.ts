@@ -36,7 +36,8 @@ export class NetworkService {
             frequency: network.frequency / 1000,
             quality: network.quality,
           }));
-          this.socket.send('wifi_List', wifi_list);
+          // this.socket.send('wifi_List', wifi_list);
+          return wifi_list;
         }
       });
     } catch (error) {
