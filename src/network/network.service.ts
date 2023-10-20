@@ -52,7 +52,7 @@ export class NetworkService {
       return result;
     } catch (error) {
       console.error('Error getting current Wifi Connection data:', error);
-      return error;
+      return error.message;
     }
   }
 
