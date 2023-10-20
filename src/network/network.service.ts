@@ -8,10 +8,10 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class NetworkService {
+  private ssidList: any[];
   constructor(
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,
-    private ssidList: any[],
   ) {
     console.log('network init');
     this.bootstrap();
