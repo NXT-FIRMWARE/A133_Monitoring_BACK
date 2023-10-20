@@ -44,7 +44,8 @@ export class NetworkService {
     }
   }
 
-  async hostname(hostname) {
+  async hostname(hostname: string) {
+    console.log(hostname);
     try {
       const result = execSync(
         `sudo hostnamectl set-hostname ${hostname}`,
