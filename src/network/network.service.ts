@@ -4,12 +4,14 @@ import { SocketService } from 'src/socket/socket.service';
 import { execSync } from 'child_process';
 import { platform, networkInterfaces } from 'os';
 import { error } from 'console';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class NetworkService {
   constructor(
     @Inject(forwardRef(() => SocketService))
     private socket: SocketService,
+    private ssidList: any[],
   ) {
     console.log('network init');
     this.bootstrap();
@@ -20,7 +22,11 @@ export class NetworkService {
     });
   }
 
-  async getWifiList() {
+  getWifiList() {
+    return this.ssidList;
+  }
+  @Cron(CronExpression.EVERY_5_SECONDS)
+  async scanWifi() {
     try {
       /***********/
       try {
@@ -33,12 +39,12 @@ export class NetworkService {
           console.log(error);
         } else {
           console.log(networks);
-          return networks;
+          this.ssidList = networks;
         }
       });
     } catch (error) {
       console.error('Error getting wifi list data:', error);
-      return [];
+      this.ssidList = [];
     }
   }
 
