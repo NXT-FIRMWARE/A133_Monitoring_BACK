@@ -1,7 +1,7 @@
 import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import * as wifi from 'node-wifi';
 import { SocketService } from 'src/socket/socket.service';
-import { execSync } from 'child_process';
+import { exec, execSync } from 'child_process';
 import { platform, networkInterfaces } from 'os';
 import { error } from 'console';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -22,30 +22,49 @@ export class NetworkService {
     });
   }
 
-  getWifiList() {
-    return this.ssidList;
-  }
-  @Cron(CronExpression.EVERY_5_SECONDS)
-  async scanWifi() {
-    try {
-      /***********/
-      try {
-        execSync('sudo nmcli dev wifi rescan');
-      } catch (err) {}
+  // getWifiList() {
+  //   return this.ssidList;
+  // }
+  // @Cron(CronExpression.EVERY_5_SECONDS)
+  // async scanWifi() {
+  //   try {
+  //     /***********/
+  //     try {
+  //       execSync('sudo nmcli dev wifi rescan');
+  //     } catch (err) {}
 
-      /***********/
-      return await wifi.scan((error: any, networks: any) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log(networks);
-          this.ssidList = networks;
-        }
+  //     /***********/
+  //     return await wifi.scan((error: any, networks: any) => {
+  //       if (error) {
+  //         console.log(error);
+  //       } else {
+  //         console.log(networks);
+  //         this.ssidList = networks;
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error('Error getting wifi list data:', error);
+  //     this.ssidList = [];
+  //   }
+  // }
+  async getAllWifis() {
+    try {
+      exec('sudo nmcli device wifi rescan');
+    } catch (error) {}
+
+    const result = await wifi
+      .scan()
+      .then((networks: { ssid: string; signal_level: number }[]) => {
+        // networks
+        console.log('networks scan');
+        return networks;
+      })
+      .catch((error: any) => {
+        // error
+        console.log('error');
+        return error;
       });
-    } catch (error) {
-      console.error('Error getting wifi list data:', error);
-      this.ssidList = [];
-    }
+    return result;
   }
 
   async hostname(hostname) {
