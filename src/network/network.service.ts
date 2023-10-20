@@ -47,7 +47,7 @@ export class NetworkService {
   //     this.ssidList = [];
   //   }
   // }
-  async getAllWifis() {
+  async getWifiList() {
     try {
       exec('sudo nmcli device wifi rescan');
     } catch (error) {}
