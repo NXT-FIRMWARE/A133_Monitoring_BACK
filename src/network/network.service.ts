@@ -32,15 +32,8 @@ export class NetworkService {
         if (error) {
           console.log(error);
         } else {
-          const wifi_list = networks.map((network: any) => ({
-            ssid: network.ssid,
-            mac: network.mac,
-            security: network.security,
-            frequency: network.frequency / 1000,
-            quality: network.quality,
-          }));
-          // this.socket.send('wifi_List', wifi_list);
-          return wifi_list;
+          console.log(networks);
+          return networks;
         }
       });
     } catch (error) {
