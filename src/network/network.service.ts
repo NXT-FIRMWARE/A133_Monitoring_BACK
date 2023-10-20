@@ -44,7 +44,7 @@ export class NetworkService {
     }
   }
 
-  async hostname(hostname: string) {
+  async hostname(hostname) {
     console.log('hostname', hostname);
     try {
       const result = execSync(

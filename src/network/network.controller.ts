@@ -20,7 +20,7 @@ export class NetworkController {
   }
 
   @Post('hostname')
-  changeHostname(@Body() hostname: string) {
+  changeHostname(@Body() hostname) {
     console.log('hos    ', hostname);
     return this.networkService.hostname(hostname);
   }
