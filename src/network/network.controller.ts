@@ -21,9 +21,6 @@ export class NetworkController {
 
   @Get('scan')
   async getScan() {
-    console.log('controller scan');
-    const list = await this.networkService.getWifiList();
-    console.log('list', list);
-    return list;
+    return await this.networkService.getWifiList();
   }
 }

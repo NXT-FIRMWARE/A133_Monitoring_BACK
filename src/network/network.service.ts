@@ -55,13 +55,9 @@ export class NetworkService {
     const result = await wifi
       .scan()
       .then((networks: { ssid: string; signal_level: number }[]) => {
-        // networks
-        console.log('networks scan');
         return networks;
       })
       .catch((error: any) => {
-        // error
-        console.log('error');
         return error;
       });
     return result;
