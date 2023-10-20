@@ -5,11 +5,11 @@ import { NetworkService } from './network.service';
 export class NetworkController {
   constructor(private readonly networkService: NetworkService) {}
 
-  @Post('Connect_Wifi')
+  @Post('wifi')
   connectWifi(@Body() connectToWifi: any) {
     return this.networkService.connectToWifi(connectToWifi);
   }
-  @Post('Connect_Ethernet')
+  @Post('ethernet')
   connectEthernet(@Body() connectToEthernet: any) {
     return this.networkService.connectToWifi(connectToEthernet);
   }
