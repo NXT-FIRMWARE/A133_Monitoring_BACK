@@ -95,6 +95,7 @@ export class NetworkService {
 
   async connectToWifi(connectToWifi: any) {
     let result = '';
+    console.log('connectToWifi', connectToWifi);
     if (platform() === 'linux') {
       try {
         if (connectToWifi.isDhcp) {
