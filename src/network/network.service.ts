@@ -25,7 +25,7 @@ export class NetworkService {
       try {
         execSync('sudo nmcli dev wifi rescan');
       } catch (err) {}
-      await wifi.scan((error: any, networks: any) => {
+      return await wifi.scan((error: any, networks: any) => {
         if (error) {
           console.log(error);
         } else {
@@ -42,6 +42,7 @@ export class NetworkService {
       });
     } catch (error) {
       console.error('Error getting wifi list data:', error);
+      return [];
     }
   }
 

@@ -20,8 +20,8 @@ export class NetworkController {
   }
 
   @Get('scan')
-  getScan() {
+  async getScan() {
     console.log('controller scan');
-    return this.networkService.getWifiList();
+    return await this.networkService.getWifiList();
   }
 }
