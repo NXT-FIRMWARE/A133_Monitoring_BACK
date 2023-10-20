@@ -122,8 +122,13 @@ export class NetworkService {
           result = execSync(
             `sudo nmcli con add type wifi ifname wlan0 ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dns} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up wifi-wlan0 `,
           ).toString();
-          if (result.toString().includes('Error')) return error;
-          else return `linux connected successefull to ${connectToWifi.ssid}`;
+          if (result.toString().includes('Error')) {
+            console.log('error');
+            throw new BadRequestException('wrong password', {
+              cause: new Error(),
+              description: 'wrong password',
+            });
+          } else return `linux connected successefull to ${connectToWifi.ssid}`;
         }
       } catch (error) {
         console.log('error');
@@ -135,7 +140,10 @@ export class NetworkService {
     }
     if (platform() === 'win32') {
       console.log('windows');
-      return 'not working on windows';
+      throw new BadRequestException('not working on windows', {
+        cause: new Error(),
+        description: 'not working on windows',
+      });
     }
   }
 
@@ -165,18 +173,29 @@ export class NetworkService {
             `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${connectToEthernet.ip}/${connectToEthernet.mask} gw4 ${connectToEthernet.dw} ipv4.dns ${connectToEthernet.dnsP} &&  sudo nmcli con up Wired\\ connection`,
           ).toString();
         }
-        if (result.includes('Error')) return result;
-        else {
+        if (result.includes('Error')) {
+          console.log('error');
+          throw new BadRequestException('wrong password', {
+            cause: new Error(),
+            description: 'wrong password',
+          });
+        } else {
           return `linux connected successefull to ethernet`;
         }
       } catch (error) {
-        console.log(error);
-        return error;
+        console.log('error');
+        throw new BadRequestException('wrong password', {
+          cause: new Error(),
+          description: 'wrong password',
+        });
       }
     }
     if (platform() === 'win32') {
       console.log('windows');
-      return 'not working on windows';
+      throw new BadRequestException('not working on windows', {
+        cause: new Error(),
+        description: 'not working on windows',
+      });
     }
   }
 
