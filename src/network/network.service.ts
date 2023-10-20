@@ -108,12 +108,13 @@ export class NetworkService {
             `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
           ).toString();
           console.log('the reult is :', result);
-          if (result.toString().includes('Error'))
+          if (result.toString().includes('Error')) {
+            console.log('error');
             throw new BadRequestException('wrong password', {
               cause: new Error(),
               description: 'wrong password',
             });
-          else return `linux connected successefull to ${connectToWifi.ssid}`;
+          } else return `linux connected successefull to ${connectToWifi.ssid}`;
         } else {
           try {
             execSync('sudo nmcli con delete wifi-wlan0 ');
@@ -125,6 +126,7 @@ export class NetworkService {
           else return `linux connected successefull to ${connectToWifi.ssid}`;
         }
       } catch (error) {
+        console.log('error');
         throw new BadRequestException('wrong password', {
           cause: new Error(),
           description: 'wrong password',
