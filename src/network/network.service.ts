@@ -125,9 +125,9 @@ export class NetworkService {
           else return `linux connected successefull to ${connectToWifi.ssid}`;
         }
       } catch (error) {
-        throw new BadRequestException('wrong ssid', {
+        throw new BadRequestException('wrong password', {
           cause: new Error(),
-          description: 'wrong ssid',
+          description: 'wrong password',
         });
       }
     }
