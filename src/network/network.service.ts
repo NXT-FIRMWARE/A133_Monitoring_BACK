@@ -22,9 +22,12 @@ export class NetworkService {
 
   async getWifiList() {
     try {
+      /***********/
       try {
         execSync('sudo nmcli dev wifi rescan');
       } catch (err) {}
+
+      /***********/
       return await wifi.scan((error: any, networks: any) => {
         if (error) {
           console.log(error);
