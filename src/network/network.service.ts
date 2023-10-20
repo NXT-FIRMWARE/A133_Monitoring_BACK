@@ -45,14 +45,13 @@ export class NetworkService {
   }
 
   async hostname(hostname: string) {
-    console.log(hostname);
+    console.log('hostname', hostname);
     try {
       const result = execSync(
         `sudo hostnamectl set-hostname ${hostname}`,
       ).toString();
       return result;
     } catch (error) {
-      console.error('Error getting current Wifi Connection data:', error);
       return error.message;
     }
   }
