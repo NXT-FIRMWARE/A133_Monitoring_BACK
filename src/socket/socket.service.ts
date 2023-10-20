@@ -39,6 +39,7 @@ export class SocketService implements OnModuleInit {
   }
 
   onNetwork() {
+    console.log('scan');
     this.network.getWifiList();
   }
   send(topic: string, data: any) {
