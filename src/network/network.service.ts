@@ -147,8 +147,7 @@ export class NetworkService {
               .send('connection succes');
         }
       } catch (error) {
-        console.log('erroe', error.Error);
-        return response.status(HttpStatus.BAD_REQUEST).send(error.Error);
+        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
       }
     }
     if (platform() === 'win32') {
@@ -198,8 +197,7 @@ export class NetworkService {
         else
           return response.status(HttpStatus.CREATED).send('connection succes');
       } catch (error) {
-        console.log('error', error.message);
-        return response.status(HttpStatus.BAD_REQUEST).send(error.error);
+        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
       }
     }
     if (platform() === 'win32') {
