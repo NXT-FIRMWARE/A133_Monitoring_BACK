@@ -108,8 +108,8 @@ export class NetworkService {
             `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
           ).toString();
           console.log('the reult is :', result);
-          if (result.toString().includes('Error')) {
-            console.log('error');
+          if (result.includes('Error')) {
+            console.log('error result', result);
             throw new BadRequestException('wrong password', {
               cause: new Error(),
               description: 'wrong password',
@@ -131,7 +131,7 @@ export class NetworkService {
           } else return `linux connected successefull to ${connectToWifi.ssid}`;
         }
       } catch (error) {
-        console.log('error');
+        // console.log('error');
         throw new BadRequestException('ssid not found', {
           cause: new Error(),
           description: 'ssid not found',
