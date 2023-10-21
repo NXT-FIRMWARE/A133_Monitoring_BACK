@@ -47,14 +47,18 @@ export class NetworkService {
         : '--';
       console.log(eth0_ip, eth0_ssid, wlan0_ip, wlan0_ssid);
       return {
-        wifi: {
-          ssid: wlan0_ssid,
-          ip: wlan0_ip,
-        },
-        ethernet: {
-          ssid: eth0_ssid,
-          ip: eth0_ip,
-        },
+        wifi: [
+          {
+            ssid: wlan0_ssid,
+            ip: wlan0_ip,
+          },
+        ],
+        ethernet: [
+          {
+            ssid: eth0_ssid,
+            ip: eth0_ip,
+          },
+        ],
       };
     } catch (error) {
       return response.status(HttpStatus.BAD_REQUEST).send();
