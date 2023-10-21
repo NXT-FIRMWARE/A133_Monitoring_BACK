@@ -10,8 +10,8 @@ export class NetworkController {
     return this.networkService.connectToWifi(response, connectToWifi);
   }
   @Post('ethernet')
-  connectEthernet(@Body() connectToEthernet: any) {
-    return this.networkService.connectToEthernet(connectToEthernet);
+  connectEthernet(@Res() response: Response, @Body() connectToEthernet: any) {
+    return this.networkService.connectToEthernet(response, connectToEthernet);
   }
 
   @Get('status')

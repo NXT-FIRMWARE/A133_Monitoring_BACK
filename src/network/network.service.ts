@@ -104,37 +104,40 @@ export class NetworkService {
     if (platform() === 'linux') {
       try {
         if (connectToWifi.isDhcp) {
+          try {
+            execSync('sudo nmcli con delete wifi-wlan0');
+          } catch (error) {}
           result = execSync(
-            `sudo nmcli dev wifi connect ${connectToWifi.ssid} password ${connectToWifi.password}`,
+            `sudo nmcli dev wifi connect ${connectToWifi.ssid}  name wifi-wlan0 password ${connectToWifi.password}`,
           ).toString();
           console.log('the reult is :', result);
-          if (result.includes('Error')) {
-            console.log('error result', result);
-            throw new BadRequestException('wrong password', {
-              cause: new Error(),
-              description: 'wrong password',
-            });
-          } else return response.status(HttpStatus.CREATED).send();
+          if (result.includes('Error'))
+            return response.status(HttpStatus.BAD_REQUEST).send();
+          else return response.status(HttpStatus.CREATED).send();
         } else {
           try {
             execSync('sudo nmcli con delete wifi-wlan0 ');
           } catch (error) {}
           result = execSync(
-            `sudo nmcli con add type wifi ifname wlan0 ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dnsP} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up wifi-wlan0 `,
+            `sudo nmcli con add type wifi ifname wlan0 ssid  ${
+              connectToWifi.ssid
+            }  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${
+              connectToWifi.password
+            } ipv4.method manual ipv4.address ${connectToWifi.ip}/${
+              connectToWifi.mask
+            } ipv4.dns ${
+              (connectToWifi.dnsP, connectToWifi?.dnsS)
+            } ipv4.gateway ${
+              connectToWifi.gw
+            }  && sudo nmcli con up wifi-wlan0 `,
           ).toString();
-          if (result.toString().includes('Error')) {
-            console.log('error');
-            throw new BadRequestException('wrong password', {
-              cause: new Error(),
-              description: 'wrong password',
-            });
-          } else return `linux connected successefull to ${connectToWifi.ssid}`;
+          if (result.includes('Error'))
+            return response.status(HttpStatus.BAD_REQUEST).send();
+          else return response.status(HttpStatus.CREATED).send();
         }
       } catch (error) {
         console.log('error catch', error.message);
-        throw new BadRequestException(error.message, {
-          cause: new Error(),
-        });
+        return response.status(HttpStatus.BAD_REQUEST).send();
       }
     }
     if (platform() === 'win32') {
@@ -146,7 +149,7 @@ export class NetworkService {
     }
   }
 
-  async connectToEthernet(connectToEthernet: any) {
+  async connectToEthernet(response: Response, connectToEthernet: any) {
     let result = '';
     if (platform() === 'linux') {
       try {
@@ -163,30 +166,25 @@ export class NetworkService {
               `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 &&  sudo nmcli con up Wired\\ connection`,
             ).toString();
           console.log('the reult is :', result);
-          return result;
+          return response.status(HttpStatus.CREATED).send();
         } else {
           try {
             execSync('sudo nmcli con delete Wired\\ connection');
           } catch (error) {}
           result = execSync(
-            `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${connectToEthernet.ip}/${connectToEthernet.mask} gw4 ${connectToEthernet.dw} ipv4.dns ${connectToEthernet.dnsP} &&  sudo nmcli con up Wired\\ connection`,
+            `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${
+              connectToEthernet.ip
+            }/${connectToEthernet.mask} gw4 ${connectToEthernet.dw} ipv4.dns ${
+              (connectToEthernet.dnsP, connectToEthernet.dnsS)
+            } &&  sudo nmcli con up Wired\\ connection`,
           ).toString();
         }
-        if (result.includes('Error')) {
-          console.log('error');
-          throw new BadRequestException('wrong password', {
-            cause: new Error(),
-            description: 'wrong password',
-          });
-        } else {
-          return `linux connected successefull to ethernet`;
-        }
+        if (result.includes('Error'))
+          return response.status(HttpStatus.BAD_REQUEST).send();
+        else return response.status(HttpStatus.CREATED).send();
       } catch (error) {
-        console.log('error');
-        throw new BadRequestException('wrong password', {
-          cause: new Error(),
-          description: 'wrong password',
-        });
+        console.log('error', error.message);
+        return response.status(HttpStatus.BAD_REQUEST).send();
       }
     }
     if (platform() === 'win32') {
