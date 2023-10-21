@@ -160,9 +160,9 @@ export class NetworkService {
             return response.status(HttpStatus.BAD_REQUEST).send();
           else return response.status(HttpStatus.CREATED).send();
         } else {
-          try {
-            execSync('sudo nmcli con delete Wired\\ connection');
-          } catch (error) {}
+          // try {
+          //   execSync('sudo nmcli con delete Wired\\ connection');
+          // } catch (error) {}
           result = execSync(
             `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${
               connectToEthernet.ip
