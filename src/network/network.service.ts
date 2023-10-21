@@ -104,30 +104,40 @@ export class NetworkService {
     if (platform() === 'linux') {
       try {
         if (connectToWifi.isDhcp) {
-          // try {
-          //   execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
-          // } catch (error) {}
+          try {
+            execSync(`sudo nmcli con delete "Wifi connection"`);
+          } catch (error) {}
           result = execSync(
-            `sudo nmcli dev wifi connect ${connectToWifi.ssid}   password ${connectToWifi.password}`,
+            `sudo nmcli dev wifi connect ${connectToWifi.ssid}  name "Wifi connection" password ${connectToWifi.password}`,
           ).toString();
           console.log('the reult is :', result);
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
           else return response.status(HttpStatus.CREATED).send();
         } else {
-          // try {
-          //   execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
-          // } catch (error) {}
+          try {
+            execSync(`sudo nmcli con delete "Wifi connection"`);
+          } catch (error) {}
           result = execSync(
-            `sudo nmcli con add type wifi ifname wlan0 con-name ${connectToWifi.ssid} ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dnsP},${connectToWifi?.dnsS} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up ${connectToWifi.ssid}`,
+            `sudo nmcli con add type wifi ifname wlan0 con-name "Wifi connection" ssid  ${
+              connectToWifi.ssid
+            }  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${
+              connectToWifi.password
+            } ipv4.method manual ipv4.address ${connectToWifi.ip}/${
+              connectToWifi.mask
+            } ipv4.dns ${connectToWifi.dnsP}${
+              connectToWifi.dnsS ? ',' + connectToWifi.dnsS : ''
+            } ipv4.gateway ${
+              connectToWifi.gw
+            }  && sudo nmcli con up "Wifi connection"`,
           ).toString();
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
           else return response.status(HttpStatus.CREATED).send();
         }
       } catch (error) {
-        console.log('error catch', error.message);
-        return response.status(HttpStatus.BAD_REQUEST).send();
+        // console.log('error catch', error.message);
+        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
       }
     }
     if (platform() === 'win32') {
@@ -175,7 +185,7 @@ export class NetworkService {
         else return response.status(HttpStatus.CREATED).send();
       } catch (error) {
         console.log('error', error.message);
-        return response.status(HttpStatus.BAD_REQUEST).send();
+        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
       }
     }
     if (platform() === 'win32') {
