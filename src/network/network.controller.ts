@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { NetworkService } from './network.service';
-
+import { Response } from 'express';
 @Controller('network')
 export class NetworkController {
   constructor(private readonly networkService: NetworkService) {}

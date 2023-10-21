@@ -9,8 +9,7 @@ import * as wifi from 'node-wifi';
 import { SocketService } from 'src/socket/socket.service';
 import { exec, execSync } from 'child_process';
 import { platform, networkInterfaces } from 'os';
-import { error } from 'console';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Response } from 'express';
 
 @Injectable()
 export class NetworkService {
@@ -115,7 +114,7 @@ export class NetworkService {
               cause: new Error(),
               description: 'wrong password',
             });
-          } else return response.status;
+          } else return response.status(HttpStatus.CREATED).send();
         } else {
           try {
             execSync('sudo nmcli con delete wifi-wlan0 ');
