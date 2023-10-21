@@ -119,7 +119,7 @@ export class NetworkService {
             execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
           } catch (error) {}
           result = execSync(
-            `sudo nmcli con add type wifi ifname wlan0 con-name ${connectToWifi.ssid} ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dnsP},${connectToWifi?.dnsS} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up wifi-wlan0 `,
+            `sudo nmcli con add type wifi ifname wlan0 con-name ${connectToWifi.ssid} ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dnsP},${connectToWifi?.dnsS} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up ${connectToWifi.ssid}`,
           ).toString();
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
