@@ -105,10 +105,10 @@ export class NetworkService {
       try {
         if (connectToWifi.isDhcp) {
           try {
-            execSync('sudo nmcli con delete wifi-wlan0');
+            execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
           } catch (error) {}
           result = execSync(
-            `sudo nmcli dev wifi connect ${connectToWifi.ssid}  name wifi-wlan0 password ${connectToWifi.password}`,
+            `sudo nmcli dev wifi connect ${connectToWifi.ssid}   password ${connectToWifi.password}`,
           ).toString();
           console.log('the reult is :', result);
           if (result.includes('Error'))
@@ -116,10 +116,10 @@ export class NetworkService {
           else return response.status(HttpStatus.CREATED).send();
         } else {
           try {
-            execSync('sudo nmcli con delete wifi-wlan0 ');
+            execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
           } catch (error) {}
           result = execSync(
-            `sudo nmcli con add type wifi ifname wlan0 ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dnsP},${connectToWifi?.dnsS} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up wifi-wlan0 `,
+            `sudo nmcli con add type wifi ifname wlan0 name ${connectToWifi.ssid} ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dnsP},${connectToWifi?.dnsS} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up wifi-wlan0 `,
           ).toString();
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
