@@ -147,8 +147,8 @@ export class NetworkService {
               .send('connection succes');
         }
       } catch (error) {
-        console.log('erroe', error);
-        return response.status(HttpStatus.BAD_REQUEST).send(error.error);
+        console.log('erroe', error.Error);
+        return response.status(HttpStatus.BAD_REQUEST).send(error.Error);
       }
     }
     if (platform() === 'win32') {
