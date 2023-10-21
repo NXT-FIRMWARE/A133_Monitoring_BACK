@@ -62,24 +62,6 @@ export class NetworkService {
     }
   }
 
-  async getSctatus() {
-    const networkInterfaces = os.networkInterfaces();
-    const result = await wifi
-      .getCurrentConnections()
-      .then((currentConnections) => {
-        // networks
-        if (currentConnections.length === 0) return 'not  connected';
-        // return `connected to ${currentConnections[0].ssid}  IP   ${networkInterfaces['Wi-Fi'][1].address} `;
-        return `connected to ${currentConnections[0].ssid}  IP   ${networkInterfaces['wlan0'][0].address} `;
-      })
-      .catch((error: any) => {
-        // error
-        console.log(error);
-        return error;
-      });
-    return result;
-  }
-
   async connectToWifi(response: Response, connectToWifi: any) {
     let result = '';
     console.log('connectToWifi', connectToWifi);
@@ -133,11 +115,9 @@ export class NetworkService {
       }
     }
     if (platform() === 'win32') {
-      console.log('windows');
-      throw new BadRequestException('not working on windows', {
-        cause: new Error(),
-        description: 'not working on windows',
-      });
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .send('not working on windows');
     }
   }
 
@@ -183,11 +163,9 @@ export class NetworkService {
       }
     }
     if (platform() === 'win32') {
-      console.log('windows');
-      throw new BadRequestException('not working on windows', {
-        cause: new Error(),
-        description: 'not working on windows',
-      });
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .send('not working on windows');
     }
   }
 
