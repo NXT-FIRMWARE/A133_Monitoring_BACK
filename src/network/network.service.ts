@@ -132,9 +132,9 @@ export class NetworkService {
         }
       } catch (error) {
         console.log('error');
-        throw new BadRequestException('wrong password', {
+        throw new BadRequestException('ssid not found', {
           cause: new Error(),
-          description: 'wrong password',
+          description: 'ssid not found',
         });
       }
     }
