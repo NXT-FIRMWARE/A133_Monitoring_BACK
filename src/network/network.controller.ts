@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { NetworkService } from './network.service';
 
 @Controller('network')
@@ -6,12 +6,12 @@ export class NetworkController {
   constructor(private readonly networkService: NetworkService) {}
 
   @Post('wifi')
-  connectWifi(@Body() connectToWifi: any) {
-    return this.networkService.connectToWifi(connectToWifi);
+  connectWifi(@Res() response: Response, @Body() connectToWifi: any) {
+    return this.networkService.connectToWifi(response, connectToWifi);
   }
   @Post('ethernet')
   connectEthernet(@Body() connectToEthernet: any) {
-    return this.networkService.connectToWifi(connectToEthernet);
+    return this.networkService.connectToEthernet(connectToEthernet);
   }
 
   @Get('status')

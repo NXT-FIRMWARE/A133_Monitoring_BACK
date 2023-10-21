@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Inject,
   Injectable,
+  HttpStatus,
   forwardRef,
 } from '@nestjs/common';
 import * as wifi from 'node-wifi';
@@ -98,7 +99,7 @@ export class NetworkService {
     }
   }
 
-  async connectToWifi(connectToWifi: any) {
+  async connectToWifi(response: Response, connectToWifi: any) {
     let result = '';
     console.log('connectToWifi', connectToWifi);
     if (platform() === 'linux') {
@@ -114,7 +115,7 @@ export class NetworkService {
               cause: new Error(),
               description: 'wrong password',
             });
-          } else return `linux connected successefull to ${connectToWifi.ssid}`;
+          } else return response.status;
         } else {
           try {
             execSync('sudo nmcli con delete wifi-wlan0 ');
@@ -132,9 +133,8 @@ export class NetworkService {
         }
       } catch (error) {
         console.log('error catch', error.message);
-        throw new BadRequestException('ssid not found', {
+        throw new BadRequestException(error.message, {
           cause: new Error(),
-          description: 'ssid not found',
         });
       }
     }
