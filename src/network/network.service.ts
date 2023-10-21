@@ -1,23 +1,12 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  HttpStatus,
-  forwardRef,
-} from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import * as wifi from 'node-wifi';
-import { SocketService } from 'src/socket/socket.service';
 import { exec, execSync } from 'child_process';
 import { platform, networkInterfaces } from 'os';
 import { Response } from 'express';
 
 @Injectable()
 export class NetworkService {
-  private ssidList: any[];
-  constructor(
-    @Inject(forwardRef(() => SocketService))
-    private socket: SocketService,
-  ) {
+  constructor() {
     console.log('network init');
     this.bootstrap();
   }
@@ -27,32 +16,7 @@ export class NetworkService {
     });
   }
 
-  // getWifiList() {
-  //   return this.ssidList;
-  // }
-  // @Cron(CronExpression.EVERY_5_SECONDS)
-  // async scanWifi() {
-  //   try {
-  //     /***********/
-  //     try {
-  //       execSync('sudo nmcli dev wifi rescan');
-  //     } catch (err) {}
-
-  //     /***********/
-  //     return await wifi.scan((error: any, networks: any) => {
-  //       if (error) {
-  //         console.log(error);
-  //       } else {
-  //         console.log(networks);
-  //         this.ssidList = networks;
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error('Error getting wifi list data:', error);
-  //     this.ssidList = [];
-  //   }
-  // }
-  async getWifiList() {
+  async getWifiList(response: Response) {
     try {
       exec('sudo nmcli device wifi rescan');
     } catch (error) {}
@@ -63,39 +27,57 @@ export class NetworkService {
         return networks;
       })
       .catch((error: any) => {
-        return error;
+        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
       });
     return result;
   }
 
-  async hostname(hostname) {
-    console.log('hostname', hostname);
+  async getStatus(response: Response) {
     try {
-      const result = execSync(
-        `sudo hostnamectl set-hostname ${hostname}`,
+      const interfaceDetails = await networkInterfaces();
+      const wlan0_ip = interfaceDetails['wlan0'][0].address;
+      const wlan0_ssid = execSync(
+        'nmcli -t -f name,device connection show --active | grep wlan0 | cut -d: -f1',
       ).toString();
-      return result;
+      const eth0_ssid = execSync(
+        'nmcli -t -f name,device connection show --active | grep eth0 | cut -d: -f1',
+      ).toString();
+      const eth0_ip = interfaceDetails['eth0']
+        ? interfaceDetails['eth0'][0].address
+        : '--';
+      console.log(wlan0_ip, eth0_ip);
+
+      return {
+        wifi: {
+          ssid: wlan0_ssid,
+          ip: wlan0_ip,
+        },
+        ethernet: {
+          ssid: eth0_ssid,
+          ip: eth0_ip,
+        },
+      };
     } catch (error) {
-      return error.message;
+      return response.status(HttpStatus.BAD_REQUEST).send();
     }
   }
 
-  async getStatus() {
-    try {
-      const interfaceDetails = await networkInterfaces();
-      const wlan0Ip = interfaceDetails['wlan0'][0].address;
-      const eth0Ip = interfaceDetails['eth0']
-        ? interfaceDetails['eth0'][0].address
-        : '--';
-      console.log(wlan0Ip, eth0Ip);
-      return {
-        wifi: wlan0Ip,
-        ethernet: eth0Ip,
-      };
-    } catch (error) {
-      console.error('Error getting current Wifi Connection data:', error);
-      return error;
-    }
+  async getSctatus() {
+    const networkInterfaces = os.networkInterfaces();
+    const result = await wifi
+      .getCurrentConnections()
+      .then((currentConnections) => {
+        // networks
+        if (currentConnections.length === 0) return 'not  connected';
+        // return `connected to ${currentConnections[0].ssid}  IP   ${networkInterfaces['Wi-Fi'][1].address} `;
+        return `connected to ${currentConnections[0].ssid}  IP   ${networkInterfaces['wlan0'][0].address} `;
+      })
+      .catch((error: any) => {
+        // error
+        console.log(error);
+        return error;
+      });
+    return result;
   }
 
   async connectToWifi(response: Response, connectToWifi: any) {
