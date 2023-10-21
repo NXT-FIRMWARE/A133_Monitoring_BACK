@@ -118,7 +118,10 @@ export class NetworkService {
           console.log('the reult is :', result);
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
-          else return response.status(HttpStatus.CREATED).send();
+          else
+            return response
+              .status(HttpStatus.CREATED)
+              .send('connection succes');
         } else {
           try {
             execSync(`sudo nmcli con delete "Wifi connection"`);
@@ -144,7 +147,7 @@ export class NetworkService {
               .send('connection succes');
         }
       } catch (error) {
-        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
+        return response.status(HttpStatus.BAD_REQUEST).send(error.error);
       }
     }
     if (platform() === 'win32') {
@@ -195,7 +198,7 @@ export class NetworkService {
           return response.status(HttpStatus.CREATED).send('connection succes');
       } catch (error) {
         console.log('error', error.message);
-        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
+        return response.status(HttpStatus.BAD_REQUEST).send(error.error);
       }
     }
     if (platform() === 'win32') {
