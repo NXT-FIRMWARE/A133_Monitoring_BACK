@@ -45,7 +45,6 @@ export class NetworkService {
       const eth0_ip = interfaceDetails['eth0']
         ? interfaceDetails['eth0'][0].address
         : '--';
-      console.log(wlan0_ip, eth0_ip);
 
       return {
         wifi: {
