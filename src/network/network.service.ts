@@ -164,7 +164,13 @@ export class NetworkService {
             execSync('sudo nmcli con delete Wired\\ connection');
           } catch (error) {}
           result = execSync(
-            `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${connectToEthernet.ip}/${connectToEthernet.mask} gw4 ${connectToEthernet.gw} ipv4.dns ${connectToEthernet.dnsP},${connectToEthernet.dnsS} &&  sudo nmcli con up Wired\\ connection`,
+            `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${
+              connectToEthernet.ip
+            }/${connectToEthernet.mask} gw4 ${connectToEthernet.gw} ipv4.dns ${
+              connectToEthernet.dnsP
+            }${
+              connectToEthernet.dnsS ? ',' + connectToEthernet.dnsS : ''
+            }   &&  sudo nmcli con up Wired\\ connection`,
           ).toString();
         }
         if (result.includes('Error'))
