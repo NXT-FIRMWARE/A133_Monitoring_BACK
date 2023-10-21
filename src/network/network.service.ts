@@ -45,23 +45,12 @@ export class NetworkService {
       const eth0_ip = interfaceDetails['eth0']
         ? interfaceDetails['eth0'][0].address
         : '--';
-      console.log(eth0_ip, eth0_ssid, wlan0_ip, wlan0_ssid);
-      return [
-        {
-          wifi: [
-            {
-              ssid: wlan0_ssid,
-              ip: wlan0_ip,
-            },
-          ],
-          ethernet: [
-            {
-              ssid: eth0_ssid,
-              ip: eth0_ip,
-            },
-          ],
-        },
-      ];
+      console.log(wlan0_ip, eth0_ip);
+
+      return {
+        wifi: wlan0_ip,
+        ethernet: eth0_ip,
+      };
     } catch (error) {
       return response.status(HttpStatus.BAD_REQUEST).send();
     }
