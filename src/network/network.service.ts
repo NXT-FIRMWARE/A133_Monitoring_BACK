@@ -104,9 +104,9 @@ export class NetworkService {
     if (platform() === 'linux') {
       try {
         if (connectToWifi.isDhcp) {
-          try {
-            execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
-          } catch (error) {}
+          // try {
+          //   execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
+          // } catch (error) {}
           result = execSync(
             `sudo nmcli dev wifi connect ${connectToWifi.ssid}   password ${connectToWifi.password}`,
           ).toString();
@@ -115,9 +115,9 @@ export class NetworkService {
             return response.status(HttpStatus.BAD_REQUEST).send();
           else return response.status(HttpStatus.CREATED).send();
         } else {
-          try {
-            execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
-          } catch (error) {}
+          // try {
+          //   execSync(`sudo nmcli con delete ${connectToWifi.ssid}`);
+          // } catch (error) {}
           result = execSync(
             `sudo nmcli con add type wifi ifname wlan0 con-name ${connectToWifi.ssid} ssid  ${connectToWifi.ssid}  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method manual ipv4.address ${connectToWifi.ip}/${connectToWifi.mask} ipv4.dns ${connectToWifi.dnsP},${connectToWifi?.dnsS} ipv4.gateway ${connectToWifi.gw}  && sudo nmcli con up ${connectToWifi.ssid}`,
           ).toString();
@@ -160,9 +160,6 @@ export class NetworkService {
             return response.status(HttpStatus.BAD_REQUEST).send();
           else return response.status(HttpStatus.CREATED).send();
         } else {
-          // try {
-          //   execSync('sudo nmcli con delete Wired\\ connection');
-          // } catch (error) {}
           result = execSync(
             `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${
               connectToEthernet.ip
