@@ -147,6 +147,7 @@ export class NetworkService {
               .send('connection succes');
         }
       } catch (error) {
+        console.log('erroe', error.error);
         return response.status(HttpStatus.BAD_REQUEST).send(error.error);
       }
     }
