@@ -131,7 +131,7 @@ export class NetworkService {
           } else return `linux connected successefull to ${connectToWifi.ssid}`;
         }
       } catch (error) {
-        // console.log('error');
+        console.log('error catch', error.message);
         throw new BadRequestException('ssid not found', {
           cause: new Error(),
           description: 'ssid not found',
