@@ -33,32 +33,28 @@ export class NetworkService {
   }
 
   async getStatus(response: Response) {
-    try {
-      const interfaceDetails = await networkInterfaces();
-      const wlan0_ip = interfaceDetails['wlan0'][0].address;
-      const wlan0_ssid = execSync(
-        'nmcli -t -f name,device connection show --active | grep wlan0 | cut -d: -f1',
-      ).toString();
-      const eth0_ssid = execSync(
-        'nmcli -t -f name,device connection show --active | grep eth0 | cut -d: -f1',
-      ).toString();
-      const eth0_ip = interfaceDetails['eth0']
-        ? interfaceDetails['eth0'][0].address
-        : '--';
-      console.log(wlan0_ip, eth0_ip);
-      return 'ok';
-      // return {
-      //   wifi: {
-      //     ssid: wlan0_ssid,
-      //     ip: wlan0_ip,
-      //   },
-      //   ethernet: {
-      //     ssid: eth0_ssid,
-      //     ip: eth0_ip,
-      //   },
-      // };
-    } catch (error) {
-      return response.status(HttpStatus.BAD_REQUEST).send();
+    const interfaceDetails = await networkInterfaces();
+    const wlan0_ip = interfaceDetails['wlan0'][0].address;
+    const wlan0_ssid = execSync(
+      'nmcli -t -f name,device connection show --active | grep wlan0 | cut -d: -f1',
+    ).toString();
+    const eth0_ssid = execSync(
+      'nmcli -t -f name,device connection show --active | grep eth0 | cut -d: -f1',
+    ).toString();
+    const eth0_ip = interfaceDetails['eth0']
+      ? interfaceDetails['eth0'][0].address
+      : '--';
+    console.log(wlan0_ip, eth0_ip);
+    // return 'ok';
+    return {
+      wifi: {
+        ssid: wlan0_ssid,
+        ip: wlan0_ip,
+      },
+      ethernet: {
+        ssid: eth0_ssid,
+        ip: eth0_ip,
+      },
     }
   }
 
@@ -83,10 +79,10 @@ export class NetworkService {
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
           else
-            return response
+            
+        } elsreturn response
               .status(HttpStatus.CREATED)
-              .send('connection succes');
-        } else {
+              .send('connection succes');e {
           try {
             execSync(`sudo nmcli con delete "Wifi connection"`);
           } catch (error) {}
