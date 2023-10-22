@@ -15,8 +15,8 @@ export class NetworkController {
   }
 
   @Get('status')
-  getStatus(@Res() response: Response) {
-    return this.networkService.getStatus(response);
+  getStatus() {
+    return this.networkService.getStatus();
   }
 
   @Get('scan')

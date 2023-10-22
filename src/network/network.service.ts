@@ -32,7 +32,7 @@ export class NetworkService {
     return result;
   }
 
-  async getStatus(response: Response) {
+  async getStatus() {
     const interfaceDetails = await networkInterfaces();
     const wlan0_ip = interfaceDetails['wlan0'][0].address;
     const wlan0_ssid = execSync(
@@ -45,7 +45,7 @@ export class NetworkService {
       ? interfaceDetails['eth0'][0].address
       : '--';
     console.log(wlan0_ip, eth0_ip);
-    // return 'ok';
+
     return {
       wifi: {
         ssid: wlan0_ssid,
@@ -55,7 +55,7 @@ export class NetworkService {
         ssid: eth0_ssid,
         ip: eth0_ip,
       },
-    }
+    };
   }
 
   async connectToWifi(response: Response, connectToWifi: any) {
@@ -79,10 +79,10 @@ export class NetworkService {
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
           else
-            
-        } elsreturn response
+            return response
               .status(HttpStatus.CREATED)
-              .send('connection succes');e {
+              .send('connection succes');
+        } else {
           try {
             execSync(`sudo nmcli con delete "Wifi connection"`);
           } catch (error) {}
