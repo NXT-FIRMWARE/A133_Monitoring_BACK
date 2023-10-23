@@ -16,7 +16,7 @@ export class NetworkService {
     });
   }
 
-  async getWifiList(response: Response) {
+  async getWifiList() {
     try {
       exec('sudo nmcli device wifi rescan');
     } catch (error) {}
@@ -27,7 +27,7 @@ export class NetworkService {
         return networks;
       })
       .catch((error: any) => {
-        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
+        return 'response.status(HttpStatus.BAD_REQUEST).send(error.message);';
       });
     return result;
   }
