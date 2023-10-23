@@ -9,7 +9,7 @@ export class PerformanceService {
 
   async getPerformance() {
     try {
-      const cpuData = (await si.currentLoad()).avgLoad;
+      const cpuData = (await si.currentLoad()).currentLoad;
       const memoryData = await si.mem();
       const memory = {
         total: (memoryData.total / (1024 * 1024 * 1024)).toFixed(2),
