@@ -8,6 +8,7 @@ export class GeneralController {
 
   @Get('hostname')
   async getHostname() {
+    console.log('in get hostname')
     return this.generalService.getHostname();
   }
 

@@ -6,7 +6,9 @@ import { Response } from 'express';
 export class GeneralService {
   getHostname() {
     try {
-      return execSync('sudo hostname').toString();
+      const hostname =  execSync('sudo hostname').toString();
+      console.log(hostname)
+      return {"hostname" : hostname}
     } catch (error) {
       throw new Error(error.message);
     }
