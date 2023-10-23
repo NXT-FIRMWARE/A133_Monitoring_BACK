@@ -20,7 +20,7 @@ export class NetworkController {
   }
 
   @Get('scan')
-  async getScan() {
-    return await this.networkService.getWifiList();
+  async getScan(@Res() response: Response) {
+    return await this.networkService.getWifiList(response);
   }
 }
