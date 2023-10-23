@@ -6,8 +6,7 @@ import { Response } from 'express';
 export class GeneralService {
   getHostname() {
     try {
-      const hostname = execSync('sudo hostname').toString();
-      return hostname;
+      return execSync('sudo hostname').toString();
     } catch (error) {
       throw new Error(error.message);
     }
@@ -16,7 +15,7 @@ export class GeneralService {
   setHostname(response: Response, hostname: string) {
     try {
       execSync(`sudo hostnamectl set-hostname ${hostname}`).toString();
-      return response.status(HttpStatus.CREATED).send('connection succes');
+      return response.status(HttpStatus.CREATED).send();
     } catch (error) {
       throw new Error(error.message);
     }
