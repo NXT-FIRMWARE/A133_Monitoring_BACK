@@ -66,12 +66,18 @@ export class NetworkService {
     if (platform() === 'linux') {
       try {
         if (connectToWifi.isDhcp) {
-          try {
-            execSync(`sudo nmcli con delete "Wifi connection"`);
-          } catch (error) {}
-          result = execSync(
-            `sudo nmcli dev wifi connect ${connectToWifi.ssid}  name "Wifi connection" password ${connectToWifi.password}`,
+          const is_interface_exist = execSync(
+            'ls /etc/NetworkManager/system-connections/',
           ).toString();
+          if (is_interface_exist.includes('Wifi connection'))
+            result = execSync(
+              `sudo nmcli connection modify "Wifi connection" ssid  ${connectToWifi.ssid}  wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method auto && sudo nmcli con up "Wifi connection"`,
+            ).toString();
+          else
+            result = execSync(
+              `sudo nmcli dev wifi connect ${connectToWifi.ssid}  name "Wifi connection" password ${connectToWifi.password}`,
+            ).toString();
+          console.log('the reult is :', result);
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
           else
@@ -118,12 +124,17 @@ export class NetworkService {
     if (platform() === 'linux') {
       try {
         if (connectToEthernet.isDhcp) {
-          try {
-            execSync(`sudo nmcli con delete "Wired connection"`);
-          } catch (error) {}
-          result = execSync(
-            `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 &&  sudo nmcli con up Wired\\ connection`,
+          const is_interface_exist = execSync(
+            'ls /etc/NetworkManager/system-connections/',
           ).toString();
+          if (is_interface_exist.includes('Wired connection'))
+            result = execSync(
+              'sudo nmcli connection modify Wired\\ connection ipv4.method auto',
+            ).toString();
+          else
+            result = execSync(
+              `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 &&  sudo nmcli con up Wired\\ connection`,
+            ).toString();
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
           else
