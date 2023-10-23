@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { NetworkModule } from './network/network.module';
-import { GeneralModule } from './general/general.module';
-
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
-  imports: [NetworkModule, GeneralModule],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'A133_MANAGER_FRONT', 'build'),
+      exclude: ['/api/(.*)'],
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
