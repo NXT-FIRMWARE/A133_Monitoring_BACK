@@ -13,6 +13,7 @@ export class GeneralController {
 
   @Post('hostname')
   setHostname(@Res() response: Response, @Body() hostname: string) {
+    console.log(hostname, typeof hostname);
     return this.generalService.setHostname(response, hostname);
   }
 }
