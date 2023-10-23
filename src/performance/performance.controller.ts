@@ -1,7 +1,5 @@
-import {Controller, Get} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { PerformanceService } from './performance.service';
-
-
 
 @Controller('performance')
 export class PerformanceController {

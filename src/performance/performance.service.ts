@@ -12,15 +12,15 @@ export class PerformanceService {
       const cpuData = (await si.currentLoad()).avgLoad;
       const memoryData = await si.mem();
       const memory = {
-        total_GB: (memoryData.total / (1024 * 1024 * 1024)).toFixed(2),
+        total: (memoryData.total / (1024 * 1024 * 1024)).toFixed(2),
         // free_GB: (memoryData.available / (1024 * 1024 * 1024)).toFixed(2),
-        used_GB: (memoryData.active / (1024 * 1024 * 1024)).toFixed(2),
+        used: (memoryData.active / (1024 * 1024 * 1024)).toFixed(2),
       };
       const Storage_Data = await si.fsSize();
       const storage_Data_Filtered = Storage_Data.map((storage) => ({
         // partition: storage.fs,
-        total_GB: (storage.size / (1024 * 1024 * 1024)).toFixed(2),
-        used_GB: (storage.used / (1024 * 1024 * 1024)).toFixed(2),
+        total: (storage.size / (1024 * 1024 * 1024)).toFixed(2),
+        used: (storage.used / (1024 * 1024 * 1024)).toFixed(2),
         // available_GB: (storage.available / (1024 * 1024 * 1024)).toFixed(2),
         // mounted_on: storage.mount,
       }));
