@@ -1,9 +1,4 @@
 import { Injectable } from '@nestjs/common';
-<<<<<<< HEAD
-
-@Injectable()
-export class MqttService {}
-=======
 import * as mqtt from 'mqtt';
 import { Cron } from '@nestjs/schedule';
 
@@ -34,4 +29,3 @@ export class MqttService {
     console.log(message.toString());
   }
 }
->>>>>>> 7fe80e3e3e7f3ccf75fe7cdc35780384eefc5f63
