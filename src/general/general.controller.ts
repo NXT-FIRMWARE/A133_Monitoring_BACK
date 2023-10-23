@@ -14,6 +14,6 @@ export class GeneralController {
   @Post('hostname')
   setHostname(@Res() response: Response, @Body() hostname: any) {
     console.log(hostname, typeof hostname);
-    return this.generalService.setHostname(response, hostname);
+    return this.generalService.setHostname(response, hostname.hostname);
   }
 }
