@@ -77,7 +77,7 @@ export class NetworkService {
           ).toString();
           if (is_interface_exist.includes('Wifi connection'))
             result = execSync(
-              `sudo nmcli connection modify "Wifi connection" wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method auto && sudo nmcli con up "Wifi connection"`,
+              `sudo nmcli connection modify "Wifi connection" ssid  ${connectToWifi.ssid}  wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${connectToWifi.password} ipv4.method auto && sudo nmcli con up "Wifi connection"`,
             ).toString();
           else
             result = execSync(
