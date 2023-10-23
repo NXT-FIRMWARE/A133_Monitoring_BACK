@@ -50,8 +50,8 @@ export class NetworkService {
       console.log(wlan0_ip, eth0_ip);
 
       return {
-        wifi_ip: wlan0_ip,
-        ethernet_ip: eth0_ip,
+        wifi: wlan0_ip,
+        ethernet: eth0_ip,
       };
     } catch (error) {
       throw new BadRequestException(error.message, {
