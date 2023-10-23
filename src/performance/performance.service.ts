@@ -26,7 +26,7 @@ export class PerformanceService {
       }));
 
       return {
-        cpu: cpuData,
+        cpu: cpuData.toFixed(2),
         memory: memory,
         storage: storage_Data_Filtered[0],
       };
