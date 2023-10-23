@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, BadRequestException } from '@nestjs/common';
 import * as wifi from 'node-wifi';
 import { exec, execSync } from 'child_process';
 import { platform, networkInterfaces } from 'os';
@@ -16,7 +16,7 @@ export class NetworkService {
     });
   }
 
-  async getWifiList(response: Response) {
+  async getWifiList() {
     try {
       exec('sudo nmcli device wifi rescan');
     } catch (error) {}
@@ -27,7 +27,9 @@ export class NetworkService {
         return networks;
       })
       .catch((error: any) => {
-        return response.status(HttpStatus.BAD_REQUEST).send(error.message);
+        throw new BadRequestException(error.message, {
+          cause: new Error(),
+        });
       });
     return result;
   }
