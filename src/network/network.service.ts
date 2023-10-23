@@ -20,7 +20,7 @@ export class NetworkService {
     try {
       exec('sudo nmcli device wifi rescan');
     } catch (error) {}
-
+    console.log('in');
     const result = await wifi
       .scan()
       .then((networks: { ssid: string; signal_level: number }[]) => {
