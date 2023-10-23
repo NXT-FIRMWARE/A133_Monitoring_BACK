@@ -47,11 +47,15 @@ export class NetworkService {
       const eth0_ip = interfaceDetails['eth0']
         ? interfaceDetails['eth0'][0].address
         : '--';
+      const mobile_ip = interfaceDetails['ppp0']
+        ? interfaceDetails['ppp0'][0].address
+        : '--';
       console.log(wlan0_ip, eth0_ip);
 
       return {
         wifi: wlan0_ip,
         ethernet: eth0_ip,
+        mobile: mobile_ip,
       };
     } catch (error) {
       throw new BadRequestException(error.message, {
