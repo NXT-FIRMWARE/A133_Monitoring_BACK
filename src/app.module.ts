@@ -7,7 +7,7 @@ import { MqttModule } from './mqtt/mqtt.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'A133_MANAGER_FRONT', 'build'),
+      rootPath: join(__dirname, '..', '..', 'A133_MANAGER_FRONT', 'dist'),
       exclude: ['/api/(.*)'],
     }),
     MqttModule,
