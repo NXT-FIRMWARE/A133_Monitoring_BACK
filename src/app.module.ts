@@ -6,6 +6,7 @@ import { join } from 'path';
 import { MqttModule } from './mqtt/mqtt.module';
 import { NetworkModule } from './network/network.module';
 import { GeneralModule } from './general/general.module';
+import { PerformanceModule } from './performance/performance.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { GeneralModule } from './general/general.module';
       exclude: ['/api/(.*)'],
     }),
     MqttModule,
+    PerformanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
