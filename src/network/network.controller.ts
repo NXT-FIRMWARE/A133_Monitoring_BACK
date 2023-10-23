@@ -15,12 +15,12 @@ export class NetworkController {
   }
 
   @Get('status')
-  getStatus() {
-    return this.networkService.getStatus();
+  getStatus(@Res() response: Response) {
+    return this.networkService.getStatus(response);
   }
 
   @Get('scan')
-  async getScan() {
-    return await this.networkService.getWifiList();
+  async getScan(@Res() response: Response) {
+    return await this.networkService.getWifiList(response);
   }
 }

@@ -16,7 +16,7 @@ export class NetworkService {
     });
   }
 
-  async getWifiList() {
+  async getWifiList(response: Response) {
     try {
       exec('sudo nmcli device wifi rescan');
     } catch (error) {}
@@ -27,14 +27,15 @@ export class NetworkService {
         return networks;
       })
       .catch((error: any) => {
-        throw new BadRequestException(error.message, {
-          cause: new Error(),
-        });
+        // throw new BadRequestException(error.message, {
+        //   cause: new Error(),
+        // });
+        return response.status(HttpStatus.BAD_REQUEST).send();
       });
     return result;
   }
 
-  async getStatus() {
+  async getStatus(response: Response) {
     try {
       const interfaceDetails = await networkInterfaces();
       const wlan0_ip = interfaceDetails['wlan0'][0].address;
@@ -60,9 +61,10 @@ export class NetworkService {
         },
       };
     } catch (error) {
-      throw new BadRequestException(error.message, {
-        cause: new Error(),
-      });
+      // throw new BadRequestException(error.message, {
+      //   cause: new Error(),
+      // });
+      return response.status(HttpStatus.BAD_REQUEST).send();
     }
   }
 
