@@ -25,7 +25,10 @@ export class NetworkService {
       .scan()
       .then((networks: { ssid: string; signal_level: number }[]) => {
         const fitered_wifi = networks.filter((wifi, index) => {
-          return index === networks.findIndex(element => wifi.ssid === element.ssid);
+          return (
+            index ===
+            networks.findIndex((element) => wifi.ssid === element.ssid)
+          );
         });
         return fitered_wifi;
       })
@@ -41,12 +44,6 @@ export class NetworkService {
     try {
       const interfaceDetails = await networkInterfaces();
       const wlan0_ip = interfaceDetails['wlan0'][0].address;
-      // const wlan0_ssid = execSync(
-      //   'nmcli -t -f name,device connection show --active | grep wlan0 | cut -d: -f1',
-      // ).toString();
-      // const eth0_ssid = execSync(
-      //   'nmcli -t -f name,device connection show --active | grep eth0 | cut -d: -f1',
-      // ).toString();
       const eth0_ip = interfaceDetails['eth0']
         ? interfaceDetails['eth0'][0].address
         : '--';
@@ -60,6 +57,22 @@ export class NetworkService {
         ethernet: eth0_ip,
         mobile: mobile_ip,
       };
+    } catch (error) {
+      throw new BadRequestException(error.message, {
+        cause: new Error(),
+      });
+    }
+  }
+
+  async setMobile(response: Response, connectToMobile: any) {
+    try {
+      if (connectToMobile.pin)
+        execSync(`sudo mmcli -i 0 --pin=${connectToMobile.pin}`).toString();
+      if (connectToMobile.apn)
+        execSync(
+          `sudo nmcli connection down ppp0 && sudo mmcli -m 0 --simple-connect="${connectToMobile.pin}" && sudo nmcli connection up ppp0`,
+        ).toString();
+      return response.status(HttpStatus.BAD_REQUEST).send();
     } catch (error) {
       throw new BadRequestException(error.message, {
         cause: new Error(),

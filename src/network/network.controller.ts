@@ -13,6 +13,10 @@ export class NetworkController {
   connectEthernet(@Res() response: Response, @Body() connectToEthernet: any) {
     return this.networkService.connectToEthernet(response, connectToEthernet);
   }
+  @Post('mobile')
+  setMobile(@Res() response: Response, @Body() connectToMobile: any) {
+    return this.networkService.setMobile(response, connectToMobile);
+  }
 
   @Get('status')
   getStatus() {
