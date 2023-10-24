@@ -17,8 +17,10 @@ export class DiscoveryService {
   constructor() {
     console.log('discovery init');
     this.client = dgram.createSocket('udp4');
-    this.client.setBroadcast(true);
-    this.client.on('message',this.onMessage.bind(this))
+    this.client.on('message',this.onMessage.bind(this));
+    this.client.on('listening',()=>{
+        this.client.setBroadcast(true);
+    })
     this.client.bind(5555)
     //this.bootstrap();
   }
