@@ -24,7 +24,10 @@ export class NetworkService {
     const result = await wifi
       .scan()
       .then((networks: { ssid: string; signal_level: number }[]) => {
-        return networks;
+        const fitered_wifi = networks.filter((wifi, index) => {
+          return index === networks.findIndex(element => wifi.ssid === element.ssid);
+        });
+        return fitered_wifi;
       })
       .catch((error: any) => {
         throw new BadRequestException(error.message, {
