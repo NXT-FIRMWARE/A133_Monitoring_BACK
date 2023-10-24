@@ -37,16 +37,20 @@ export class PerformanceService {
   }
 
   async processes() {
-    const result = await si
-      .processes()
-      .then((services) => {
-        return services.list;
-      })
-      .catch((error) => {
-        console.log(error);
-        return error.message;
-      });
-    return result;
+    try {
+      const result = await si
+        .processes()
+        .then((services) => {
+          return services.list;
+        })
+        .catch((error) => {
+          console.log(error);
+          return error.message;
+        });
+      return result;
+    } catch (error) {
+      return error.message;
+    }
   }
 
   async killProcess(pid: number) {
