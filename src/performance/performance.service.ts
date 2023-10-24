@@ -26,13 +26,10 @@ export class PerformanceService {
         // mounted_on: storage.mount,
       }));
 
-      const services = (await si.processes()).running;
-
       return {
         cpu: cpuData.toFixed(2),
         memory: memory,
         storage: storage_Data_Filtered[0],
-        services: services,
       };
     } catch (error) {
       return 'error';
