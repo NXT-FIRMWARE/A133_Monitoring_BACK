@@ -1,6 +1,6 @@
 import { Injectable} from '@nestjs/common';
 import { execSync } from 'child_process';
-import dgram from 'dgram';
+import * as dgram from 'dgram';
 import { networkInterfaces } from 'os';
 
 interface STATUS {
