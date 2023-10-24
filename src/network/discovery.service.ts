@@ -51,7 +51,6 @@ export class DiscoveryService {
           ? interfaceDetails['ppp0'][0].address
           : '--';
         console.log(wlan0_ip, eth0_ip);
-        this.
         return {
           hostname,
           wifi_mac,
