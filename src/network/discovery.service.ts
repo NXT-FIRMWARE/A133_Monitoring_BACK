@@ -22,29 +22,35 @@ export class DiscoveryService {
         this.client.setBroadcast(true);
     })
     this.client.bind(5555)
-    //this.bootstrap();
   }
   onMessage(message,rinfo){
-    console.log(message);
-    console.log(rinfo);
+    //console.log(message);
+    //console.log(rinfo);
+    this.client.send(this.networkStatus(),)
     
     }
 
   async networkStatus() {
     try {
-        const host =  execSync('sudo hostname').toString();
+        const hostname =  execSync('sudo hostname').toString();
         const interfaceDetails = await networkInterfaces();
         const wlan0_ip = interfaceDetails['wlan0'][0].address;
         const eth0_ip = interfaceDetails['eth0']
           ? interfaceDetails['eth0'][0].address
           : '--';
+        const eth0_mac =  interfaceDetails['eth0']
+        ? interfaceDetails['eth0'][0].mac
+        : '--';
+        const wlan0_mac =  interfaceDetails['wlan0']
+        ? interfaceDetails['wlan0'][0].mac
+        : '--';
         const mobile_ip = interfaceDetails['ppp0']
           ? interfaceDetails['ppp0'][0].address
           : '--';
         console.log(wlan0_ip, eth0_ip);
   
         return {
-          host,
+          hostname,
           wifi: wlan0_ip,
           eth: eth0_ip,
           mobile: mobile_ip,
