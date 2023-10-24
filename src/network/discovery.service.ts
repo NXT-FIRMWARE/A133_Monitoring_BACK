@@ -17,21 +17,16 @@ export class NetworkService {
   constructor() {
     console.log('discovery init');
     this.client = dgram.createSocket('udp4');
-    
+    this.client.setBroadcast(true);
+    this.client.on('message',this.onMessage.bind(this))
     this.client.bind(5555)
-
-    this.bootstrap();
+    //this.bootstrap();
   }
-  bootstrap() {
-    this.client.on('listening', function () {
-        this.client.setBroadcast(true);
-        this.setReuseAddress(true);
-    });
-    this.client.on('message',(message,rinfo)=>{
-        console.log(message);
-        console.log(rinfo);
-    })
-  }
+  onMessage(message,rinfo){
+    console.log(message);
+    console.log(rinfo);
+    
+    }
 
   async networkStatus() {
     try {
