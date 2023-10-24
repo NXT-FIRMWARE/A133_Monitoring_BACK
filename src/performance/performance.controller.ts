@@ -10,9 +10,9 @@ export class PerformanceController {
     return this.performance.getPerformance();
   }
 
-  @Get('services')
+  @Get('processes')
   async getService() {
-    return await this.performance.services();
+    return await this.performance.processes();
   }
 
   @Post('process')

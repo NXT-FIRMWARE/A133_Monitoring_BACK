@@ -39,7 +39,7 @@ export class PerformanceService {
     }
   }
 
-  async services() {
+  async processes() {
     const result = await si
       .processes()
       .then((services) => {
