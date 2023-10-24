@@ -29,7 +29,7 @@ export class DiscoveryService {
     async onMessage(message,rinfo){
   
         const payload  = await this.networkStatus()
-        this.client.send(payload,0,payload.toString().length,this.port,rinfo.address)
+        this.client.send(payload.toString(),0,payload.toString().length,this.port,rinfo.address)
     
     }
 
