@@ -16,7 +16,7 @@ export class PerformanceController {
   }
 
   @Post('process')
-  async killProcess(@Body() pid: number) {
-    return await this.performance.killProcess(pid);
+  async killProcess(@Body() data: any) {
+    return await this.performance.killProcess(data.pid);
   }
 }
