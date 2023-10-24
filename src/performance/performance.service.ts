@@ -1,4 +1,5 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { execSync } from 'child_process';
 import * as si from 'systeminformation';
 
 @Injectable()
@@ -32,6 +33,31 @@ export class PerformanceService {
       };
     } catch (error) {
       return 'error';
+    }
+  }
+
+  async processes() {
+    try {
+      const result = await si
+        .processes()
+        .then((services) => {
+          return services.list;
+        })
+        .catch((error) => {
+          console.log(error);
+          return error.message;
+        });
+      return result;
+    } catch (error) {
+      return error.message;
+    }
+  }
+
+  async killProcess(pid: number) {
+    try {
+      execSync(`sudo kill -9 ${pid}`);
+    } catch (error) {
+      return error.message;
     }
   }
 }
