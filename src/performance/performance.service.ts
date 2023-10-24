@@ -53,7 +53,7 @@ export class PerformanceService {
     }
   }
 
-  async killProcess(pid: number) {
+  async killProcess(pid) {
     try {
       execSync(`sudo kill -9 ${pid}`);
     } catch (error) {
