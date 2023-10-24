@@ -11,7 +11,7 @@ interface STATUS {
 }
 
 @Injectable()
-export class NetworkService {
+export class DiscoveryService {
   private port = 5555;
   private client;
   constructor() {
