@@ -43,7 +43,7 @@ export class PerformanceService {
     const result = await si
       .processes()
       .then((services) => {
-        return services;
+        return services.list;
       })
       .catch((error) => {
         console.log(error);
