@@ -7,6 +7,8 @@ import { MqttModule } from './mqtt/mqtt.module';
 import { NetworkModule } from './network/network.module';
 import { GeneralModule } from './general/general.module';
 import { PerformanceModule } from './performance/performance.module';
+import { CommunicationModule } from './communication/communication.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { PerformanceModule } from './performance/performance.module';
     }),
     MqttModule,
     PerformanceModule,
+    CommunicationModule,
+    SocketModule,
   ],
   controllers: [AppController],
   providers: [AppService],
