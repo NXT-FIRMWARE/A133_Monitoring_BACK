@@ -30,13 +30,20 @@ export class SocketService implements OnModuleInit {
     socket.on('communication', this.onCommunication.bind(this));
   }
 
-  onCommunication(data: any) {
-    console.log(data.topic, data.value);
-    if (data.topic === 'open') {
-      this.communication.openUsbPort(data.value);
+  onCommunication(serialPortData: any) {
+    console.log('data', serialPortData)
+    if (serialPortData.action === 'open') {
+      try {   
+        this.communication.openPort(serialPortData.path, serialPortData.baudRate, serialPortData.delimiter);
+      } catch (error) {
+        console.log(error.message)
+      } 
     }
-    if (data.topic === 'close') {
-      this.communication.CloseUsbPort(data.value);
+    if (serialPortData.action === 'close') {
+      this.communication.ClosePort(serialPortData.path);
+    }
+    if (serialPortData.action === 'write') {
+      this.communication.writePort(serialPortData.path, serialPortData.data);
     }
   }
 
