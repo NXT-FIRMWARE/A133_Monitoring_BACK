@@ -53,6 +53,7 @@ export class CommunicationService {
     );
     list = list.filter((port) => port.path != '/dev/ttyS0');
     console.log('list', list);
-    this.socket.send('ports', list);
+    // this.socket.send('ports', list);
+    return list;
   }
 }
