@@ -40,7 +40,6 @@ export class FileUploadController {
   )
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
-    // @Body('destination') destination: string,
   ) {
     try {
       if (path.extname(file.originalname) === '.zip') {
