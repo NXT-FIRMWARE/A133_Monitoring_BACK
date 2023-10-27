@@ -59,23 +59,6 @@ export class FileUploadController {
             targetPath: file.destination,
           });
 
-          // Extract a specific files
-          const extracted = extractor.extract({ files: ['cpuData.js'] });
-          // extracted.arcHeader  : archive header
-          const files = [...extracted.files]; //load the files
-          console.log(files);
-
-          // to get info about the archive folder
-          // const list = extractor.getFileList();
-          // const listArcHeader = list.arcHeader; // archive header
-          // const fileHeaders = [...list.fileHeaders]; // load the file headers
-          // console.log('listArcHeader', listArcHeader);
-          // console.log('fileHeaders', fileHeaders);
-
-          // to extract all files
-          // [extractor.extract({ files: ['cpuData.js'] })];
-
-          // to extract all files
           // Extract the files
           [...extractor.extract().files];
         } catch (err) {
@@ -89,10 +72,5 @@ export class FileUploadController {
     }
     return 'file saved';
   }
-  // @Post()
-  // @UseInterceptors(FileInterceptor('file'))
-  // uploadFile(@UploadedFile() file: Express.Multer.File) {
-  //   console.log(typeof file);
-  //   return file ? file : 'ok';
-  // }
+
 }
