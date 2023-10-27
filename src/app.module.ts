@@ -9,6 +9,8 @@ import { GeneralModule } from './general/general.module';
 import { PerformanceModule } from './performance/performance.module';
 import { CommunicationModule } from './communication/communication.module';
 import { SocketModule } from './socket/socket.module';
+import { FileUploadModule } from './file_upload/file_upload.module';
+import { ShellModule } from './shell/shell.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { SocketModule } from './socket/socket.module';
     PerformanceModule,
     CommunicationModule,
     SocketModule,
+    FileUploadModule,
+    ShellModule,
   ],
   controllers: [AppController],
   providers: [AppService],
