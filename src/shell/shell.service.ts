@@ -3,17 +3,12 @@ import { execSync } from 'child_process';
 
 @Injectable()
 export class ShellService {
-  constructor() {
-    console.log('command execution init');
-  }
+  constructor() {}
 
   executeCommand(data: any) {
     try {
-      const result = execSync(data).toString();
-      console.log('result', result);
-      return result;
+      return execSync(data).toString();
     } catch (error) {
-      console.log('error', error.message);
       return error.message;
     }
   }
