@@ -7,7 +7,12 @@ import { MqttModule } from './mqtt/mqtt.module';
 import { NetworkModule } from './network/network.module';
 import { GeneralModule } from './general/general.module';
 import { PerformanceModule } from './performance/performance.module';
+<<<<<<< HEAD
 import { ShellModule } from './shell/shell.module';
+=======
+import { CommunicationModule } from './communication/communication.module';
+import { SocketModule } from './socket/socket.module';
+>>>>>>> c806c03be6df8975fce3237c833d8f7dfda6129e
 
 @Module({
   imports: [
@@ -19,7 +24,12 @@ import { ShellModule } from './shell/shell.module';
     }),
     MqttModule,
     PerformanceModule,
+<<<<<<< HEAD
     ShellModule,
+=======
+    CommunicationModule,
+    SocketModule,
+>>>>>>> c806c03be6df8975fce3237c833d8f7dfda6129e
   ],
   controllers: [AppController],
   providers: [AppService],
