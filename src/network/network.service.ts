@@ -42,7 +42,7 @@ export class NetworkService {
   async getStatus() {
     try {
       const interfaceDetails = await networkInterfaces();
-
+      console.log(interfaceDetails);
       const wlan0_ip = interfaceDetails['wlo1'][0].address;
       const eth0_ip = interfaceDetails['eth0']
         ? interfaceDetails['eth0'][0].address
