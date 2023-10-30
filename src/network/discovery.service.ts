@@ -41,26 +41,26 @@ export class DiscoveryService {
     try {
       const hostname = execSync('sudo hostname').toString();
       const interfaceDetails = await networkInterfaces();
-      const wlan0_ip = interfaceDetails['wlan0'][0].address;
-      const eth0_ip = interfaceDetails['eth0']
-        ? interfaceDetails['eth0'][0].address
+      const wlo1_ip = interfaceDetails['wlo1'][0].address;
+      const enp88s0_ip = interfaceDetails['enp88s0']
+        ? interfaceDetails['enp88s0'][0].address
         : '--';
-      const ethernet_mac = interfaceDetails['eth0']
-        ? interfaceDetails['eth0'][0].mac
+      const ethernet_mac = interfaceDetails['enp88s0']
+        ? interfaceDetails['enp88s0'][0].mac
         : '--';
-      const wifi_mac = interfaceDetails['wlan0']
-        ? interfaceDetails['wlan0'][0].mac
+      const wifi_mac = interfaceDetails['wlo1']
+        ? interfaceDetails['wlo1'][0].mac
         : '--';
       const mobile_ip = interfaceDetails['ppp0']
         ? interfaceDetails['ppp0'][0].address
         : '--';
-      console.log(wlan0_ip, eth0_ip);
+      console.log(wlo1_ip, enp88s0_ip);
       return {
         hostname,
         wifi_mac,
         ethernet_mac,
-        wifi: wlan0_ip,
-        eth: eth0_ip,
+        wifi: wlo1_ip,
+        eth: enp88s0_ip,
         mobile: mobile_ip,
       };
     } catch (error) {

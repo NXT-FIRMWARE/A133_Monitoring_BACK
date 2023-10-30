@@ -109,7 +109,7 @@ export class NetworkService {
             execSync(`sudo nmcli con delete "Wifi connection"`);
           } catch (error) {}
           result = execSync(
-            `sudo nmcli con add type wifi ifname wlan0 con-name "Wifi connection" ssid  ${
+            `sudo nmcli con add type wifi ifname wlo1 con-name "Wifi connection" ssid  ${
               connectToWifi.ssid
             }  -- wifi-sec.key-mgmt wpa-psk wifi-sec.psk ${
               connectToWifi.password
