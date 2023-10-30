@@ -44,17 +44,17 @@ export class NetworkService {
       const interfaceDetails = await networkInterfaces();
       console.log(interfaceDetails);
       const wlan0_ip = interfaceDetails['wlo1'][0].address;
-      const eth0_ip = interfaceDetails['eth0']
-        ? interfaceDetails['eth0'][0].address
+      const enp88s0_ip = interfaceDetails['enp88s0']
+        ? interfaceDetails['enp88s0'][0].address
         : '--';
       const mobile_ip = interfaceDetails['ppp0']
         ? interfaceDetails['ppp0'][0].address
         : '--';
-      console.log(wlan0_ip, eth0_ip);
+      console.log(wlan0_ip, enp88s0_ip);
 
       return {
         wifi: wlan0_ip,
-        ethernet: eth0_ip,
+        ethernet: enp88s0_ip,
         mobile: mobile_ip,
       };
     } catch (error) {
@@ -153,7 +153,7 @@ export class NetworkService {
             ).toString();
           else
             result = execSync(
-              `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 &&  sudo nmcli con up Wired\\ connection`,
+              `sudo nmcli con add type ethernet con-name "Wired connection" ifname enp88s0 &&  sudo nmcli con up Wired\\ connection`,
             ).toString();
           if (result.includes('Error'))
             return response.status(HttpStatus.BAD_REQUEST).send();
@@ -163,7 +163,7 @@ export class NetworkService {
               .send('connection succes');
         } else {
           result = execSync(
-            `sudo nmcli con add type ethernet con-name "Wired connection" ifname eth0 ip4 ${
+            `sudo nmcli con add type ethernet con-name "Wired connection" ifname enp88s0 ip4 ${
               connectToEthernet.ip
             }/${connectToEthernet.mask} gw4 ${connectToEthernet.gw} ipv4.dns ${
               connectToEthernet.dnsP
