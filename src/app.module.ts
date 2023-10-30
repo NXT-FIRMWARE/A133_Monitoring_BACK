@@ -7,12 +7,10 @@ import { MqttModule } from './mqtt/mqtt.module';
 import { NetworkModule } from './network/network.module';
 import { GeneralModule } from './general/general.module';
 import { PerformanceModule } from './performance/performance.module';
-<<<<<<< HEAD
 import { ShellModule } from './shell/shell.module';
-=======
 import { CommunicationModule } from './communication/communication.module';
 import { SocketModule } from './socket/socket.module';
->>>>>>> c806c03be6df8975fce3237c833d8f7dfda6129e
+import { FileSystemModule } from './file_system/file_system.module';
 
 @Module({
   imports: [
@@ -24,12 +22,10 @@ import { SocketModule } from './socket/socket.module';
     }),
     MqttModule,
     PerformanceModule,
-<<<<<<< HEAD
     ShellModule,
-=======
+    FileSystemModule,
     CommunicationModule,
     SocketModule,
->>>>>>> c806c03be6df8975fce3237c833d8f7dfda6129e
   ],
   controllers: [AppController],
   providers: [AppService],
